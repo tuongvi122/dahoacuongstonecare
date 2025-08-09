@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Stonecare Việt Nam Co., Ltd</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap">
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      margin: 0;
+      background: #fff;
+      color: #222;
+    }
+    .header {
+      border: 2px solid #1c8e3c;
+      margin: 8px;
+      background: #fff;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      min-height: 70px;
+      position: relative;
+    }
+    .logo {
+      position: static;
+      transform: none;
+      margin-right: 16px;
+    }
+    .logo img {
+      height: 60px;
+      margin: 0;
+    }
+    .header-title {
+      position: static;
+      flex: 1;
+      text-align: center;
+      color: #d71b21;
+      font-weight: bold;
+      font-size: 30px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      background: #fff;
+      padding: 0 15px;
+      z-index: 1;
+    }
+    .header-contact {
+      position: static;
+      transform: none;
+      margin-left: 16px;
+      display: flex;
+      align-items: center;
+      font-size: 18px;
+    }
+    .hotline {
+      color: #d71b21;
+      background: #fff;
+      border: 2px solid #d71b21;
+      border-radius: 8px;
+      padding: 4px 16px;
+      font-weight: bold;
+      margin-right: 16px;
+    }
+    .header-search input {
+      padding: 6px 12px;
+      border-radius: 20px;
+      border: 1px solid #bbb;
+      outline: none;
+    }
+    h2.section-title {
+      color: #1c8e3c;
+      border-left: 4px solid #1c8e3c;
+      padding-left: 12px;
+      margin: 25px 0 12px 8px;
+      font-size: 22px;
+      text-transform: uppercase;
+      margin-top: 12px;
+    }
+    .products-section {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px 16px;
+      margin: 0 auto 40px auto;
+      max-width: 1400px;
+      padding: 0 10px;
+      margin-bottom: 10px;
+    }
+    .product-card {
+      width: calc((100% - 4 * 16px) / 5);
+      min-width: 160px;
+      max-width: 200px;
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .product-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
+    .product-card .name {
+      font-size: 15px;
+      font-weight: bold;
+      margin: 12px 0 10px 0;
+      color: #222;
+    }
+    .product-card .baogia-btn {
+      margin-bottom: 12px;
+      padding: 5px 0;
+      width: 70%;
+      background: #ed1c24;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      font-size: 14px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    .product-card .baogia-btn:hover {
+      background: #b4161b;
+    }
+    .popup-bg {
+      display: none;
+      position: fixed;
+      z-index: 99;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.3);
+      justify-content: center;
+      align-items: center;
+      overflow: auto;
+    }
+    .popup-bg.open {
+      display: flex;
+    }
+    .popup {
+      background: #fff;
+      width: 420px;
+      max-width: 96vw;
+      border-radius: 8px;
+      box-shadow: 0 0 16px rgba(0,0,0,0.12);
+      padding: 25px 18px 18px 18px;
+      position: relative;
+      max-height: 90vh;
+      overflow-y: auto;
+      margin: 0;
+    }
+    .popup .close {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      font-size: 22px;
+      color: #999;
+      cursor: pointer;
+    }
+    .popup-title {
+      text-align: center;
+      color: #197b30;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 2px;
+      margin-bottom: 20px;
+    }
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 12px;
+    }
+    .price-table th,
+    .price-table td {
+      border: 1px solid #bbb;
+      padding: 6px 7px;
+      text-align: center;
+    }
+    .price-table th {
+      background: #f6f6f6;
+      font-weight: bold;
+      color: #197b30;
+    }
+.price-table th:nth-child(2),
+.price-table td:nth-child(2) {
+  min-width: 120px;    /* Hoặc tăng lên 140px nếu muốn rộng hơn */
+  width: 120px;
+}
+
+.price-table th:nth-child(4),
+.price-table td:nth-child(4) {
+  min-width: 80px;     /* Đơn giá cung cấp nhỏ lại */
+  width: 90px;
+}
+.price-table th:nth-child(5),
+.price-table td:nth-child(5) {
+  min-width: 80px;     /* Đơn giá cung cấp nhỏ lại */
+  width: 90px;
+}
+    .popup-note {
+      font-size: 14px;
+      color: #c7212e;
+      margin-bottom: 16px;
+    }
+    .popup-note span {
+      color: #222;
+      font-weight: normal;
+      font-style: italic;
+    }
+    .popup-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      justify-content: center;
+      margin-bottom: 5px;
+    }
+    .popup-actions button {
+      flex: 1 1 120px;
+      padding: 9px 0;
+      font-size: 15px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .btn-xanh {
+      background: #1d78cb;
+      color: #fff;
+    }
+    .btn-xanhl {
+      background: #36b225;
+      color: #fff;
+    }
+    .btn-do {
+      background: #ed1c24;
+      color: #fff;
+    }
+    .btn-close {
+      background: #aaa;
+      color: #fff;
+    }
+  .popup-actions .btn-close {
+  min-width: 40px;
+  max-width: 50px;
+  height: 32px;       /* Chiều cao nhỏ */
+  padding: 0 8px;
+  font-size: 13px;
+  line-height: 32px;  /* Giúp chữ căn giữa theo chiều dọc */
+}
+
+.popup-actions .btn-do {
+  min-width: 70px;
+  max-width: 155px;
+  height: 32px;       /* Chiều cao nhỏ bằng nút đóng */
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 32px;
+}
+
+.popup-actions .btn-xanh {
+  min-width: 70px;
+  max-width: 105px;
+  height: 32px;       /* Chiều cao nhỏ bằng nút đóng */
+  padding: 0 10px;
+  font-size: 13px;
+  line-height: 32px;
+}
+    .artificial-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 18px 16px;
+    }
+    .artificial-filter {
+      background: #fff;
+      color: #ed1c24;
+      border: 2px solid #ed1c24;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      border-radius: 16px;
+    }
+    .artificial-filter.active,
+    .artificial-filter:hover {
+      background: #ed1c24;
+      color: #fff;
+    }
+    .pagination-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 18px 0 24px 0;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pagination {
+      display: flex;
+      gap: 4px;
+    }
+    .pagination-btn,
+    .pagination-page {
+      min-width: 30px;
+      height: 32px;
+      padding: 0 5px;
+      border: 1.5px solid #bbb;
+      border-radius: 4px;
+      background: #fff;
+      color: #d71b21;
+      font-size: 15px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.12s, color 0.12s;
+      outline: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .pagination-page.active,
+    .pagination-btn:active,
+    .pagination-btn:focus {
+      background: #d71b21;
+      color: #fff;
+      border-color: #d71b21;
+    }
+    .pagination-ellipsis {
+      pointer-events: none;
+      color: #bbb;
+      font-size: 18px;
+      min-width: 28px;
+      text-align: center;
+      background: none;
+      border: none;
+    }
+    .pagination-viewall {
+      color: #ed1c24;
+      background: #fff8e1;
+      border: 2px solid #ff9800;
+      padding: 1px 7px;
+      font-size: 17px;
+      font-weight: bold;
+      margin-right: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.12s, border 0.12s;
+      height: 30px;
+      line-height: 30px;
+      display: flex;
+      align-items: center;
+    }
+    .pagination-viewall:hover {
+      background: #ffe0b2;
+      border: 2px solid #ed1c24;
+    }
+    .pagination-toggle {
+      color: #ed1c24;
+      background: #fff8e1;
+      border: 2px solid #ff9800;
+      padding: 0 10px;
+      font-size: 15px;
+      font-weight: bold;
+      margin-right: 10px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.12s, border 0.12s;
+      height: 32px;
+      line-height: 32px;
+      display: flex;
+      align-items: center;
+    }
+    .pagination-toggle:hover {
+      background: #ffe0b2;
+      border: 2px solid #ed1c24;
+    }
+    .mobile-navbar {
+      display: none;
+      width: 100vw;
+      background: #fff;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      padding: 0;
+    }
+    .mobile-navbar-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      padding: 0 8px;
+      position: relative;
+    }
+    .mobile-navbar .menu-btn,
+    .mobile-navbar .search-btn {
+      background: none;
+      border: none;
+      outline: none;
+      font-size: 28px;
+      color: #d71b21;
+      cursor: pointer;
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .mobile-navbar .logo-center {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mobile-navbar .logo-center img {
+      height: 42px;
+      display: block;
+      margin: 0 auto;
+    }
+    .icon-hamburger {
+      width: 28px;
+      height: 28px;
+      display: inline-block;
+      position: relative;
+    }
+    .icon-hamburger span {
+      display: block;
+      height: 3px;
+      background: #d71b21;
+      margin: 5px 0;
+      border-radius: 2px;
+      transition: 0.3s;
+    }
+    .mobile-menu-drawer {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 84vw;
+      max-width: 320px;
+      height: 100vh;
+      background: #fff;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.11);
+      z-index: 200;
+      transform: translateX(-100%);
+      transition: 0.3s;
+      padding: 0;
+      overflow-y: auto;
+    }
+    .mobile-menu-drawer.open {
+      transform: translateX(0);
+    }
+    .mobile-menu-header {
+      padding: 18px 18px 8px 18px;
+      border-bottom: 1px solid #eee;
+      background: #fff;
+      font-weight: bold;
+      font-size: 20px;
+      color: #d71b21;
+      text-align: left;
+    }
+    .mobile-menu-list {
+      list-style: none;
+      margin: 0;
+      padding: 15px 0 0 0;
+    }
+    .mobile-menu-list > li {
+      padding: 10px 24px;
+      cursor: pointer;
+      font-size: 16px;
+      color: #333;
+      border-left: 4px solid transparent;
+      transition: background 0.12s, border 0.12s;
+    }
+    .mobile-menu-list > li.active,
+    .mobile-menu-list > li:hover {
+      background: #ffe0e3;
+      border-left: 4px solid #d71b21;
+      color: #d71b21;
+    }
+    .submenu {
+      padding-left: 24px;
+      margin-top: 4px;
+    }
+    .submenu li {
+      font-size: 15px;
+      padding: 7px 18px;
+      color: #333;
+      border-left: 3px solid transparent;
+      cursor: pointer;
+      transition: background 0.12s, border 0.12s;
+    }
+    .submenu li.active,
+    .submenu li:hover {
+      background: #fff2f2;
+      border-left: 3px solid #d71b21;
+      color: #d71b21;
+    }
+    .mobile-menu-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.18);
+      z-index: 120;
+      display: none;
+    }
+    .mobile-menu-backdrop.open {
+      display: block;
+    }
+    .mobile-search-modal {
+      display: none;
+      position: fixed;
+      top: 56px;
+      right: 8px;
+      left: 8px;
+      bottom: auto;
+      width: auto;
+      height: auto;
+      background: none;
+      z-index: 210;
+      align-items: flex-start;
+      justify-content: flex-end;
+    }
+    .mobile-search-modal.open {
+      display: flex;
+    }
+    .mobile-search-box {
+      background: #fff;
+      border-radius: 22px;
+      padding: 7px 13px 7px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.20);
+      display: flex;
+      align-items: center;
+      width: 95vw;
+      max-width: 350px;
+      min-width: 190px;
+    }
+    .mobile-search-box input {
+      border: none;
+      outline: none;
+      font-size: 17px;
+      flex: 1;
+      padding: 7px 12px;
+      border-radius: 20px;
+      color: #222;
+    }
+    .mobile-search-close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      margin-left: 8px;
+      color: #d71b21;
+      cursor: pointer;
+    }
+    .mobile-category-title {
+      display: none;
+      text-align: center;
+      color: #d71b21;
+      font-weight: bold;
+      font-size: 25px;
+      text-transform: uppercase;
+      margin: 20px 0 12px 0;
+      letter-spacing: 1px;
+    }
+    @media (max-width: 650px) {
+      .header {
+        display: none !important;
+      }
+      .mobile-navbar {
+        display: block;
+      }
+      .mobile-category-title {
+        display: block;
+        font-size: 18px;
+        line-height: 1;
+        padding: 6px 0;
+      }
+      h2.section-title {
+        display: block;
+        font-size: 18px;
+        margin-top: 6px;
+        margin-bottom: 6px;
+      }
+      .artificial-filters {
+        margin-top: 0;
+      }
+      .products-section {
+        gap: 10px 6px;
+        max-width: 100vw;
+        padding: 0 4px;
+        margin-top: 0;
+        margin-bottom: 20px;
+      }
+      .product-card {
+        width: calc(50% - 8px) !important;
+        min-width: 0;
+        max-width: 100%;
+        font-size: 13px;
+        margin: 0;
+      }
+      .product-card img {
+        height: 90px;
+      }
+      .product-card .baogia-btn {
+        font-size: 12px;
+        padding: 4px 0;
+        width: 70%;
+        border-radius: 4px;
+        margin-bottom: 10px;
+      }
+      .pagination-container {
+        margin-top: 0;
+      }
+      .popup-bg {
+        align-items: flex-start;
+        padding-top: 70px; /* Adjusted to account for mobile navbar height */
+      }
+      .popup {
+        margin: 0 !important;
+        max-height: calc(100vh - 95px); /* Adjusted to ensure full visibility below navbar */
+        overflow-y: auto;
+      }
+      .popup-note span {
+      font-style: italic;
+      }
+ .price-table th:nth-child(2),
+  .price-table td:nth-child(2) {
+    min-width: 80px;
+    width: 90px;        /* Cột "Hạng mục" rộng hơn */
+    text-align: left;
+  }
+  .price-table th:nth-child(4),
+  .price-table td:nth-child(4) {
+    min-width: 55px;
+    width: 90px;         /* Cột "Đơn giá cung cấp" nhỏ lại */
+  }
+  .price-table th:nth-child(5),
+  .price-table td:nth-child(5) {
+    min-width: 55px;
+    width: 90px;         /* Cột "Đơn giá cung cấp" nhỏ lại */
+  }
+  .price-table th, .price-table td {
+    font-size: 15px;     /* Có thể thu nhỏ chữ cho vừa cột */
+    padding: 5px 4px;    /* Padding nhỏ cho bảng gọn lại */
+  }
+    }
+    @media (min-width: 651px) {
+      .mobile-navbar,
+      .mobile-category-title,
+      .mobile-menu-drawer,
+      .mobile-menu-backdrop,
+      .mobile-search-modal {
+        display: none !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .mobile-search-box {
+        width: 93vw;
+        max-width: 97vw;
+      }
+    }
+/* Overlay loading phủ kín popup */
+.popup-loading-overlay {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(255,255,255,0.77);
+  z-index: 2000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  pointer-events: all; /* Đảm bảo overlay chặn mọi thao tác bên dưới */
+}
+.popup-loading-overlay.show {
+  display: flex;
+}
+.popup-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.popup-loading-spinner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.popup-loading-spinner .fa-spinner {
+  font-size: 2.1em;
+  color: #1976d2;
+}
+.popup-loading-spinner .loading-text {
+  font-size: 1.12em;
+  color: #1976d2;
+  font-weight: bold;
+}
+  </style>
+</head>
+<body>
+  <!-- MOBILE NAVBAR -->
+  <div class="mobile-navbar">
+    <div class="mobile-navbar-inner">
+      <button class="menu-btn" id="openMenuMobile" aria-label="Menu">
+        <span class="icon-hamburger">
+          <span style="width:100%"></span>
+          <span style="width:100%"></span>
+          <span style="width:100%"></span>
+        </span>
+      </button>
+      <div class="logo-center" id="logo-mobile">
+        <img src="https://chibiimage.b-cdn.net/Logostonecare.jpg" alt="Stonecare logo"/>
+      </div>
+      <script>
+        document.getElementById('logo-mobile').onclick = function() {
+          window.location.href = 'sanpham.html';
+        };
+      </script>
+      <button class="search-btn" id="openSearchMobile" aria-label="Tìm kiếm">
+        <svg width="25" height="25" viewBox="0 0 25 25" fill="none"><circle cx="11" cy="11" r="7" stroke="#d71b21" stroke-width="2"/><path d="M20 20L16.5 16.5" stroke="#d71b21" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="mobile-category-title" id="mobileCategoryTitle">Xem giá ngay không cần hỏi!</div>
+
+  <!-- MENU DRAWER -->
+  <div class="mobile-menu-backdrop" id="menuBackdrop"></div>
+  <nav class="mobile-menu-drawer" id="menuDrawer">
+    <div class="mobile-menu-header">Danh mục</div>
+    <ul class="mobile-menu-list" id="menuList">
+      <li data-cat="all">Tất cả</li>
+      <li data-cat="marble">Đá marble</li>
+      <li data-cat="granite">Đá granite</li>
+      <li data-cat="artificial">Đá nhân tạo
+        <ul class="submenu">
+          <li data-cat="artificial-nungket">Đá nung kết</li>
+          <li data-cat="artificial-vicostone">Đá vi co</li>
+          <li data-cat="artificial-baophat">Đá bảo phát</li>
+          <li data-cat="artificial-trangsu">Đá trắng sứ</li>
+          <li data-cat="artificial-ntthuong">Đá nt thường</li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- SEARCH MODAL -->
+  <div class="mobile-search-modal" id="mobileSearchModal">
+    <form class="mobile-search-box" onsubmit="return false;">
+      <input id="mobileSearchInput" type="text" placeholder="Tìm kiếm sản phẩm..." autocomplete="off"/>
+      <button type="button" class="mobile-search-close" id="closeSearchMobile">&times;</button>
+    </form>
+  </div>
+
+  <!-- Navbar -->
+  <div class="header">
+    <div class="header-inner">
+      <div class="logo" id="logo">
+        <img src="https://chibiimage.b-cdn.net/Logostonecare.jpg" alt="Stonecare logo" />
+      </div>
+      <div class="header-title">
+        XEM GIÁ NGAY KHÔNG CẦN HỎI!
+      </div>
+      <div class="header-contact">
+        <span class="hotline">Hotline: 0908 221 117 Mr.Duy</span>
+        <div class="header-search">
+          <input type="text" id="searchInput" placeholder="Tìm kiếm..." />
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.getElementById('logo').onclick = function() {
+      window.location.href = 'sanpham.html';
+    };
+  </script>
+  <div class="section-wrapper" id="marble-wrapper">
+    <h2 class="section-title">ĐÁ MARBLE</h2>
+    <div id="marble-section" class="products-section"></div>
+    <div class="pagination-container" id="marble-pagination"></div>
+  </div>
+  <div class="section-wrapper" id="granite-wrapper">
+    <h2 class="section-title">ĐÁ GRANITE</h2>
+    <div id="granite-section" class="products-section"></div>
+    <div class="pagination-container" id="granite-pagination"></div>
+  </div>
+  <div class="section-wrapper" id="artificial-wrapper">
+    <h2 class="section-title">ĐÁ NHÂN TẠO</h2>
+    <div class="artificial-filters">
+      <button class="artificial-filter active" data-key="">Tất cả</button>
+      <button class="artificial-filter" data-key="nung kết">Đá nung kết</button>
+      <button class="artificial-filter" data-key="vicostone">Đá vicostone</button>
+      <button class="artificial-filter" data-key="bảo phát">Đá Bảo phát</button>
+      <button class="artificial-filter" data-key="trắng sứ">Đá trắng sứ</button>
+      <button class="artificial-filter" data-key="nt thường">Đá Nt thường</button>
+    </div>
+    <div id="artificial-section" class="products-section"></div>
+    <div class="pagination-container" id="artificial-pagination"></div>
+
+    <div id="popup-bg" class="popup-bg">
+      <div class="popup" id="popup">
+        <!-- Nội dung popup sẽ được render bằng JS -->
+      </div>
+    </div>
+  </div>
+  <script>
+    const menuDrawer = document.getElementById('menuDrawer');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+    const menuBtn = document.getElementById('openMenuMobile');
+    const menuList = document.getElementById('menuList');
+    const mobileCategoryTitle = document.getElementById('mobileCategoryTitle');
+    let currentMobileCat = "all";
+
+    function openMenuDrawer() {
+      menuDrawer.classList.add('open');
+      menuBackdrop.classList.add('open');
+    }
+    function closeMenuDrawer() {
+      menuDrawer.classList.remove('open');
+      menuBackdrop.classList.remove('open');
+    }
+    menuBtn.onclick = openMenuDrawer;
+    menuBackdrop.onclick = closeMenuDrawer;
+    menuList.onclick = function(e) {
+      const li = e.target.closest('li[data-cat]');
+      if (!li) return;
+      let cat = li.getAttribute('data-cat');
+      menuList.querySelectorAll('li').forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+      closeMenuDrawer();
+      filterMobileByCategory(cat);
+    }
+    function filterMobileByCategory(cat) {
+      currentMobileCat = cat;
+      const mobileCategoryTitle = document.getElementById('mobileCategoryTitle');
+      const marbleWrapper = document.getElementById('marble-wrapper');
+      const graniteWrapper = document.getElementById('granite-wrapper');
+      const artificialWrapper = document.getElementById('artificial-wrapper');
+      const artificialFilters = document.querySelector('.artificial-filters');
+
+      if (cat === "all") {
+        mobileCategoryTitle.style.display = '';
+        mobileCategoryTitle.textContent = "Xem giá ngay không cần hoi!";
+        marbleWrapper.style.display = '';
+        graniteWrapper.style.display = '';
+        artificialWrapper.style.display = '';
+        artificialFilters.style.display = '';
+        renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, window.innerWidth < 650 ? 10 : 18);
+        renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, window.innerWidth < 650 ? 10 : 18);
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, window.innerWidth < 650 ? 10 : 18);
+      } else if (cat === "marble" || cat === "granite" || cat === "artificial") {
+        mobileCategoryTitle.style.display = 'none';
+        let title = "";
+        if (cat === "marble") title = "ĐÁ MARBLE";
+        else if (cat === "granite") title = "ĐÁ GRANITE";
+        else title = "ĐÁ NHÂN TẠO";
+
+        marbleWrapper.style.display = (cat === "marble") ? '' : 'none';
+        graniteWrapper.style.display = (cat === "granite") ? '' : 'none';
+        artificialWrapper.style.display = (cat === "artificial") ? '' : 'none';
+        artificialFilters.style.display = (cat === "artificial") ? '' : 'none';
+
+        if (cat === "marble") {
+          renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, 10);
+        }
+        if (cat === "granite") {
+          renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, 10);
+        }
+        if (cat === "artificial") {
+          renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, 10);
+        }
+      } else if (cat.startsWith("artificial-")) {
+        mobileCategoryTitle.style.display = 'none';
+        let subkey = cat.replace("artificial-", "");
+        let showList = artificialProducts.filter(p => {
+          let ten = p.tenDa.toLowerCase();
+          if (subkey === "nungket") return ten.includes("nung kết");
+          if (subkey === "vicostone") return ten.includes("vicostone") || ten.includes("vi co");
+          if (subkey === "baophat") return ten.includes("bảo phát");
+          if (subkey === "trangsu") return ten.includes("trắng sứ");
+          if (subkey === "ntthuong") return ten.includes("nt thường");
+          return false;
+        });
+        marbleWrapper.style.display = 'none';
+        graniteWrapper.style.display = 'none';
+        artificialWrapper.style.display = '';
+        artificialFilters.style.display = 'none';
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', showList, 1, 10);
+      }
+    }
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const openSearchMobile = document.getElementById('openSearchMobile');
+    const closeSearchMobile = document.getElementById('closeSearchMobile');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    openSearchMobile.onclick = function() {
+      mobileSearchModal.classList.add('open');
+      setTimeout(() => mobileSearchInput.focus(), 150);
+    };
+    closeSearchMobile.onclick = function() {
+      mobileSearchModal.classList.remove('open');
+      mobileSearchInput.value = '';
+      filterAndPaginateSections('');
+    };
+    mobileSearchInput.oninput = function() {
+      let val = mobileSearchInput.value.trim().toLowerCase();
+      filterAndPaginateSections(val);
+    };
+    mobileSearchModal.onclick = function(e) {
+      if (e.target === mobileSearchModal) closeSearchMobile.onclick();
+    };
+
+    let marbleProducts = [];
+    let graniteProducts = [];
+    let artificialProducts = [];
+
+    function createPagination(currentPage, totalPages, isShowAll = false) {
+      let pages = [];
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages = [1];
+        if (currentPage > 4) pages.push('...');
+        for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) pages.push(i);
+        if (currentPage < totalPages - 3) pages.push('...');
+        pages.push(totalPages);
+      }
+      return `
+        <span class="pagination-toggle">${isShowAll ? 'Quay lại' : 'xem tất cả'}</span>
+        ${!isShowAll ? `
+          <div class="pagination">
+            <button class="pagination-btn" data-page="1" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>
+            <button class="pagination-btn" data-page="${currentPage-1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>
+            ${
+              pages.map(p => 
+                p === '...' 
+                  ? `<span class="pagination-ellipsis">...</span>`
+                  : `<button class="pagination-page${currentPage === p ? ' active' : ''}" data-page="${p}">${p}</button>`
+              ).join('')
+            }
+            <button class="pagination-btn" data-page="${currentPage+1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>
+            <button class="pagination-btn" data-page="${totalPages}" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>
+          </div>
+        ` : ''}
+      `;
+    }
+
+    function createProductCard(product, idx) {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `
+        <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
+        <div class="name">${product.tenDa}</div>
+        <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
+      `;
+      return div;
+    }
+
+    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
+      const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
+      const end = isShowAll ? products.length : start + itemsPerPage;
+      const pagedProducts = products.slice(start, end);
+
+      const section = document.getElementById(sectionId);
+      section.innerHTML = '';
+      pagedProducts.forEach((product, idx) => {
+        section.appendChild(createProductCard(product, start + idx));
+      });
+
+      const totalPages = Math.ceil(products.length / itemsPerPage);
+      const paginationEl = document.getElementById(paginationId);
+      if (totalPages <= 1 && !isShowAll) {
+        paginationEl.innerHTML = '';
+        return;
+      }
+      paginationEl.innerHTML = createPagination(currentPage, totalPages, isShowAll);
+
+      const toggleBtn = paginationEl.querySelector('.pagination-toggle');
+      if (toggleBtn) {
+        toggleBtn.onclick = () => {
+          if (!isShowAll) {
+            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, true);
+          } else {
+            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, false);
+          }
+        };
+      }
+      if (!isShowAll) {
+        paginationEl.querySelectorAll('.pagination-page, .pagination-btn').forEach(btn => {
+          btn.onclick = (e) => {
+            const page = +btn.getAttribute('data-page');
+            renderSectionWithPagination(sectionId, paginationId, products, page, itemsPerPage, false);
+            window.scrollTo({top: section.offsetTop - 80, behavior:'smooth'});
+          };
+        });
+      }
+    }
+
+      function renderHangMucTable(product, lapDatArr) {
+      const hangmucs = [
+        { label: 'Lát nền', key: 'latNen', dvt: 'm²' },
+        { label: 'Cầu thang', key: 'cauThang', dvt: 'm²' },
+        { label: 'Tam cấp', key: 'tamCap', dvt: 'm²' },
+        { label: 'Bếp', key: 'bep', dvt: 'm²' },
+        { label: 'Mặt tiền', key: 'matTien', dvt: 'm²' },
+        { label: 'Cột', key: 'cot', dvt: 'm²' }
+      ];
+      let rows = '';
+      hangmucs.forEach((hm, idx) => {
+        if (product[hm.key]) {
+          let lapDat = lapDatArr?.find(ld => ld.name.trim().toLowerCase() === hm.label.trim().toLowerCase());
+          let donGiaLapDat = lapDat ? lapDat.value : '';
+          rows += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td>${hm.label}</td>
+              <td>${hm.dvt}</td>
+              <td>${product[hm.key]}</td>
+              <td>${donGiaLapDat}</td>
+            </tr>
+          `;
+        }
+      });
+      return rows;
+    }
+
+    function renderGiaCongTable(giaCongArr) {
+      let rows = '';
+      giaCongArr.forEach(row => {
+        rows += `<tr>
+          <td style="text-align:left;">${row.name}</td>
+          <td style="text-align:right;">${row.value}</td>
+        </tr>`;
+      });
+      return rows;
+    }
+
+  function showPopup(product, lapDatArr, giaCongArr) {
+  const popupBg = document.getElementById('popup-bg');
+  const popup = document.getElementById('popup');
+  popup.innerHTML = `
+    <span class="close" id="close-popup">&times;</span>
+    <div style="font-weight:bold;color:#197b30;font-size:20px;text-align:center;margin-bottom:8px;">BẢNG BÁO GIÁ</div>
+    <div style="font-weight:bold;color:#197b30;margin-bottom:6px;">${product.tenDa}</div>
+    <table class="price-table" style="border:1.5px solid #168c3c;">
+      <tr style="background:#d0f5d8;color:#168c3c;">
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Stt</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Hạng mục</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đvt</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá cung cấp</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá lắp đặt</th>
+      </tr>
+      ${renderHangMucTable(product, lapDatArr)}
+    </table>
+    <div style="font-weight:bold;color:#198b3a;margin:12px 0 6px 0;">Đơn giá gia công sản phẩm</div>
+    <table class="price-table" style="border:1.5px solid #168c3c;">
+      ${renderGiaCongTable(giaCongArr)}
+    </table>
+    <div class="popup-note" style="margin-bottom:5px;">
+      <b>Ghi chú:</b> <span>
+        1. Đơn giá trên là tạm tính, đơn giá chính xác phụ thuộc vào khối lượng, tính chất công trình/dự án.<br>
+        2. Đơn giá gốc (Đơn giá gồm cung cấp và thi công) cộng thêm 10% vào đơn giá cung cấp và thi công ở trên.
+      </span>
+    </div>
+    <div class="popup-actions">
+      <button class="btn-xanh">Nhận báo giá</button>
+      <button class="btn-do">Hotline: 0908 221 117</button>
+      <button class="btn-close">Đóng</button>
+    </div>
+    <div class="popup-loading-overlay" id="popupLoading">
+      <div class="popup-loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span class="loading-text">Đang gửi mail vui lòng chờ...</span>
+      </div>
+    </div>
+  `;
+  popupBg.classList.add('open');
+  popupBg.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() {
+    popup.scrollTop = 0;
+  }, 20);
+
+  popup.querySelector('#close-popup').onclick = hidePopup;
+  popup.querySelector('.btn-close').onclick = hidePopup;
+  popup.querySelector('.btn-do').onclick = () => window.open('tel:0908221117', '_self');
+
+  // Lấy các nút để disable/enable
+  const btnBaoGia = popup.querySelector('.btn-xanh');
+  const btnHotline = popup.querySelector('.btn-do');
+  const btnClose = popup.querySelector('.btn-close');
+
+  // SỰ KIỆN GỬI EMAIL CÓ OVERLAY LOADING
+  btnBaoGia.onclick = async function() {
+    // Hiển thị overlay loading phủ toàn vùng popup
+    const overlay = popup.querySelector('.popup-loading-overlay');
+    if (overlay) overlay.classList.add('show');
+
+    // Disable ba nút
+    btnBaoGia.disabled = true;
+    btnHotline.disabled = true;
+    btnClose.disabled = true;
+
+    // Dòng HTML các hàng của bảng hạng mục
+    const hangmucRows = renderHangMucTable(product, lapDatArr);
+    // Dòng HTML các hàng của bảng gia công
+    const giaCongRows = renderGiaCongTable(giaCongArr);
+    const tenDa = product.tenDa || "";
+
+    try {
+      const res = await fetch('/api/hangmuc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tenDa, hangmucRows, giaCongRows })
+      });
+      const data = await res.json();
+      // Ẩn overlay loading và enable nút
+      if (overlay) overlay.classList.remove('show');
+      btnBaoGia.disabled = false;
+      btnHotline.disabled = false;
+      btnClose.disabled = false;
+      if (data.success) {
+        showSuccessPopup();
+      } else {
+        alert('Gửi báo giá thất bại: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      // Ẩn overlay loading khi lỗi và enable nút
+      if (overlay) overlay.classList.remove('show');
+      btnBaoGia.disabled = false;
+      btnHotline.disabled = false;
+      btnClose.disabled = false;
+      alert('Gửi báo giá thất bại: ' + err.message);
+    }
+  };
+
+  function showSuccessPopup() {
+    popup.innerHTML = `
+      <div style="text-align:center;padding:18px 10px;">
+        <h2 style="font-size:20px;color:#1c8e3c;">Báo giá đã gửi về email của bạn thành công!</h2>
+        <div style="margin:18px 0 18px 0;font-size:15px;color:#222;">Cảm ơn quý khách đã sử dụng dịch vụ Stonecare Việt Nam.</div>
+        <button class="btn-xanh" style="margin-top:16px;font-size:16px">Đóng</button>
+      </div>
+    `;
+    popup.querySelector('.btn-xanh').onclick = hidePopup;
+  }
+}
+    function hidePopup() {
+      const popupBg = document.getElementById('popup-bg');
+      popupBg.classList.remove('open');
+      popupBg.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('popup-bg').onclick = function (e) {
+      if (e.target === this) hidePopup();
+    };
+
+    async function fetchProductsAndInit() {
+      const res = await fetch('/api/hangmuc');
+      if (!res.ok) return;
+      const data = await res.json();
+      marbleProducts = data.products.filter(p => (p.loaiDa || '').toLowerCase().includes('marble'));
+      graniteProducts = data.products.filter(p => (p.loaiDa || '').toLowerCase().includes('granite'));
+      artificialProducts = data.products.filter(p => (p.loaiDa || '').toLowerCase().includes('nhân tạo'));
+      window.giaCongArr = data.giaCongArr;
+      window.lapDatArr = data.lapDatArr;
+      filterAndPaginateSections('');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('searchInput').addEventListener('input', function() {
+        var filter = this.value.trim().toLowerCase();
+        filterAndPaginateSections(filter);
+      });
+
+      let artificialFilterKey = "";
+      document.querySelectorAll('.artificial-filter').forEach(btn => {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.artificial-filter').forEach(b => b.classList.remove('active'));
+          this.classList.add('active');
+          artificialFilterKey = this.getAttribute('data-key').toLowerCase();
+          filterAndPaginateSections(document.getElementById('searchInput').value.trim().toLowerCase());
+        });
+      });
+
+      document.body.addEventListener('click', function (e) {
+        if (e.target.classList.contains('baogia-btn')) {
+          const idx = Number(e.target.getAttribute('data-idx'));
+          let sp;
+          if (e.target.closest('#marble-section')) sp = marbleProducts[idx];
+          else if (e.target.closest('#granite-section')) sp = graniteProducts[idx];
+          else if (e.target.closest('#artificial-section')) sp = artificialProducts[idx];
+          if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+        }
+      });
+
+      window.filterAndPaginateSections = function(searchTerm) {
+        let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+        renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
+
+        let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+        renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
+
+        let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
+        let filteredArtificial = artificialProducts.filter(product => {
+          let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
+          let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
+          return matchSearch && matchFilter;
+        });
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
+
+        [
+          {wrapper: 'marble-wrapper', products: filteredMarble},
+          {wrapper: 'granite-wrapper', products: filteredGranite},
+          {wrapper: 'artificial-wrapper', products: filteredArtificial}
+        ].forEach(({wrapper, products}) => {
+          var wrapperDiv = document.getElementById(wrapper);
+          if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
+        });
+
+        const artificialFilters = document.querySelector('.artificial-filters');
+        if (artificialFilters) {
+          artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
+        }
+      };
+
+      fetchProductsAndInit();
+    });
+  </script>
+</body>
+</html>

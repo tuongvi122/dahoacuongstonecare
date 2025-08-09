@@ -1,0 +1,16 @@
+{
+  "name": "customer-form-vercel",
+  "version": "1.0.0",
+  "description": "Customer form with Gmail, Google Sheets, Discord Webhook, deployable on Vercel",
+  "main": "api/submit.js",
+  "scripts": {},
+  "dependencies": {
+    "axios": "^1.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "google-spreadsheet": "^4.1.5",
+    "googleapis": "^126.0.1",
+    "nodemailer": "^6.9.0"
+  }
+}

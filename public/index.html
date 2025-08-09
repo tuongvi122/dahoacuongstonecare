@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thông tin Khách hàng</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    .form-container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #333;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+      color: #555;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+    textarea {
+      height: 80px;
+      resize: vertical;
+    }
+    button {
+      background: #007bff;
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+      width: 100%;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .required {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>📝 Thông tin Khách hàng</h2>
+    <form action="/api/submit" method="POST">
+      <label>Tên khách hàng <span class="required">*</span></label>
+      <input type="text" name="name" required placeholder="Nhập họ và tên đầy đủ">
+      
+      <label>Email khách hàng <span class="required">*</span></label>
+      <input type="email" name="email" required placeholder="example@gmail.com">
+      
+      <label>Số điện thoại <span class="required">*</span></label>
+      <input type="tel" name="phone" required placeholder="0987654321">
+      
+      <label>Ghi chú</label>
+      <textarea name="note" placeholder="Thông tin thêm (tùy chọn)"></textarea>
+      
+      <button type="submit">📤 Báo giá nhanh</button>
+    </form>
+  </div>
+</body>
+</html>
