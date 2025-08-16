@@ -753,6 +753,8 @@
       </li>
     </ul>
   </nav>
+
+  <!-- SEARCH MODAL -->
   <div class="mobile-search-modal" id="mobileSearchModal">
     <form class="mobile-search-box" onsubmit="return false;">
       <input id="mobileSearchInput" type="text" placeholder="Tìm kiếm sản phẩm..." autocomplete="off"/>
@@ -764,7 +766,7 @@
   <div class="header">
     <div class="header-inner">
       <div class="logo" id="logo">
-        <img src="https://res.cloudinary.com/drhovvwlo/image/upload/v1755313890/Logostonecare_tacgbd.jpg" alt="Stonecare logo" />
+        <img src="https://chibiimage.b-cdn.net/Logostonecare.jpg" alt="Stonecare logo" />
       </div>
       <div class="header-title">
         XEM GIÁ NGAY KHÔNG CẦN HỎI!
@@ -812,21 +814,115 @@
     </div>
   </div>
   <script>
-    // ==== Dữ liệu nguồn ====
-    let marbleProducts = [], graniteProducts = [], artificialProducts = [];
-    let marblePaged = [], granitePaged = [], artificialPaged = [];
+    const menuDrawer = document.getElementById('menuDrawer');
+    const menuBackdrop = document.getElementById('menuBackdrop');
+    const menuBtn = document.getElementById('openMenuMobile');
+    const menuList = document.getElementById('menuList');
+    const mobileCategoryTitle = document.getElementById('mobileCategoryTitle');
+    let currentMobileCat = "all";
 
-    // ==== Các hàm hỗ trợ ====
-    function createProductCard(product, idx) {
-      const div = document.createElement('div');
-      div.className = 'product-card';
-      div.innerHTML = `
-        <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
-        <div class="name">${product.tenDa}</div>
-        <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
-      `;
-      return div;
+    function openMenuDrawer() {
+      menuDrawer.classList.add('open');
+      menuBackdrop.classList.add('open');
     }
+    function closeMenuDrawer() {
+      menuDrawer.classList.remove('open');
+      menuBackdrop.classList.remove('open');
+    }
+    menuBtn.onclick = openMenuDrawer;
+    menuBackdrop.onclick = closeMenuDrawer;
+    menuList.onclick = function(e) {
+      const li = e.target.closest('li[data-cat]');
+      if (!li) return;
+      let cat = li.getAttribute('data-cat');
+      menuList.querySelectorAll('li').forEach(x => x.classList.remove('active'));
+      li.classList.add('active');
+      closeMenuDrawer();
+      filterMobileByCategory(cat);
+    }
+    function filterMobileByCategory(cat) {
+      currentMobileCat = cat;
+      const mobileCategoryTitle = document.getElementById('mobileCategoryTitle');
+      const marbleWrapper = document.getElementById('marble-wrapper');
+      const graniteWrapper = document.getElementById('granite-wrapper');
+      const artificialWrapper = document.getElementById('artificial-wrapper');
+      const artificialFilters = document.querySelector('.artificial-filters');
+
+      if (cat === "all") {
+        mobileCategoryTitle.style.display = '';
+        mobileCategoryTitle.textContent = "Xem giá ngay không cần hoi!";
+        marbleWrapper.style.display = '';
+        graniteWrapper.style.display = '';
+        artificialWrapper.style.display = '';
+        artificialFilters.style.display = '';
+        renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, window.innerWidth < 650 ? 10 : 18);
+        renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, window.innerWidth < 650 ? 10 : 18);
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, window.innerWidth < 650 ? 10 : 18);
+      } else if (cat === "marble" || cat === "granite" || cat === "artificial") {
+        mobileCategoryTitle.style.display = 'none';
+        let title = "";
+        if (cat === "marble") title = "ĐÁ MARBLE";
+        else if (cat === "granite") title = "ĐÁ GRANITE";
+        else title = "ĐÁ NHÂN TẠO";
+
+        marbleWrapper.style.display = (cat === "marble") ? '' : 'none';
+        graniteWrapper.style.display = (cat === "granite") ? '' : 'none';
+        artificialWrapper.style.display = (cat === "artificial") ? '' : 'none';
+        artificialFilters.style.display = (cat === "artificial") ? '' : 'none';
+
+        if (cat === "marble") {
+          renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, 10);
+        }
+        if (cat === "granite") {
+          renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, 10);
+        }
+        if (cat === "artificial") {
+          renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, 10);
+        }
+      } else if (cat.startsWith("artificial-")) {
+        mobileCategoryTitle.style.display = 'none';
+        let subkey = cat.replace("artificial-", "");
+        let showList = artificialProducts.filter(p => {
+          let ten = p.tenDa.toLowerCase();
+          if (subkey === "nungket") return ten.includes("nung kết");
+          if (subkey === "vicostone") return ten.includes("vicostone") || ten.includes("vi co");
+          if (subkey === "baophat") return ten.includes("bảo phát");
+          if (subkey === "trangsu") return ten.includes("trắng sứ");
+          if (subkey === "ntthuong") return ten.includes("nt thường");
+          return false;
+        });
+        marbleWrapper.style.display = 'none';
+        graniteWrapper.style.display = 'none';
+        artificialWrapper.style.display = '';
+        artificialFilters.style.display = 'none';
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', showList, 1, 10);
+      }
+    }
+    const mobileSearchModal = document.getElementById('mobileSearchModal');
+    const openSearchMobile = document.getElementById('openSearchMobile');
+    const closeSearchMobile = document.getElementById('closeSearchMobile');
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    openSearchMobile.onclick = function() {
+      mobileSearchModal.classList.add('open');
+      setTimeout(() => mobileSearchInput.focus(), 150);
+    };
+    closeSearchMobile.onclick = function() {
+      mobileSearchModal.classList.remove('open');
+      mobileSearchInput.value = '';
+      filterAndPaginateSections('');
+    };
+    mobileSearchInput.oninput = function() {
+      let val = mobileSearchInput.value.trim().toLowerCase();
+      filterAndPaginateSections(val);
+    };
+    mobileSearchModal.onclick = function(e) {
+      if (e.target === mobileSearchModal) closeSearchMobile.onclick();
+    };
+
+    let marbleProducts = [];
+    let graniteProducts = [];
+    let artificialProducts = [];
+
     function createPagination(currentPage, totalPages, isShowAll = false) {
       let pages = [];
       if (totalPages <= 7) {
@@ -857,20 +953,27 @@
         ` : ''}
       `;
     }
+
+    function createProductCard(product, idx) {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `
+        <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
+        <div class="name">${product.tenDa}</div>
+        <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
+      `;
+      return div;
+    }
+
     function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
       const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
       const end = isShowAll ? products.length : start + itemsPerPage;
       const pagedProducts = products.slice(start, end);
 
-      // Gán sản phẩm đang hiển thị vào biến toàn cục
-      if (sectionId === 'marble-section') marblePaged = pagedProducts;
-      if (sectionId === 'granite-section') granitePaged = pagedProducts;
-      if (sectionId === 'artificial-section') artificialPaged = pagedProducts;
-
       const section = document.getElementById(sectionId);
       section.innerHTML = '';
       pagedProducts.forEach((product, idx) => {
-        section.appendChild(createProductCard(product, idx));
+        section.appendChild(createProductCard(product, start + idx));
       });
 
       const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -902,35 +1005,7 @@
       }
     }
 
-    // ==== Filter/search render: gọi renderSectionWithPagination và update paged biến ====
-    window.filterAndPaginateSections = function(searchTerm) {
-      let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
-      let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-      let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-      let filteredArtificial = artificialProducts.filter(product => {
-        let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
-        let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
-        return matchSearch && matchFilter;
-      });
-      renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18, false);
-      renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18, false);
-      renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18, false);
-    };
-
-    // ==== Sự kiện Báo giá hạng mục ====
-    document.body.addEventListener('click', function (e) {
-      if (e.target.classList.contains('baogia-btn')) {
-        const idx = Number(e.target.getAttribute('data-idx'));
-        let sp;
-        if (e.target.closest('#marble-section')) sp = marblePaged[idx];
-        else if (e.target.closest('#granite-section')) sp = granitePaged[idx];
-        else if (e.target.closest('#artificial-section')) sp = artificialPaged[idx];
-        if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
-      }
-    });
-
-    // ==== Các hàm popup giữ nguyên như cũ ====
-    function renderHangMucTable(product, lapDatArr) {
+      function renderHangMucTable(product, lapDatArr) {
       const hangmucs = [
         { label: 'Lát nền', key: 'latNen', dvt: 'm²' },
         { label: 'Cầu thang', key: 'cauThang', dvt: 'm²' },
@@ -969,68 +1044,127 @@
       return rows;
     }
 
-    function showPopup(product, lapDatArr, giaCongArr) {
-      const popupBg = document.getElementById('popup-bg');
-      const popup = document.getElementById('popup');
-      popup.innerHTML = `
-        <span class="close" id="close-popup">&times;</span>
-        <div style="font-weight:bold;color:#197b30;font-size:20px;text-align:center;margin-bottom:8px;">BẢNG BÁO GIÁ</div>
-        <div style="font-weight:bold;color:#197b30;margin-bottom:6px;">${product.tenDa}</div>
-        <table class="price-table" style="border:1.5px solid #168c3c;">
-          <tr style="background:#d0f5d8;color:#168c3c;">
-            <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Stt</th>
-            <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Hạng mục</th>
-            <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đvt</th>
-            <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá cung cấp</th>
-            <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá lắp đặt</th>
-          </tr>
-          ${renderHangMucTable(product, lapDatArr)}
-        </table>
-        <div style="font-weight:bold;color:#198b3a;margin:12px 0 6px 0;">Đơn giá gia công sản phẩm</div>
-        <table class="price-table" style="border:1.5px solid #168c3c;">
-          ${renderGiaCongTable(giaCongArr)}
-        </table>
-        <div class="popup-note" style="margin-bottom:5px;">
-          <b>Ghi chú:</b> <span>
-            1. Đơn giá trên là tạm tính, đơn giá chính xác phụ thuộc vào khối lượng, tính chất công trình/dự án.<br>
-            2. Đơn giá gốc (Đơn giá gồm cung cấp và thi công) cộng thêm 10% vào đơn giá cung cấp và thi công ở trên.
-          </span>
-        </div>
-        <div class="popup-actions">
-          <button class="btn-xanh">Nhận báo giá</button>
-          <button class="btn-do">Hotline: 0908 221 117</button>
-          <button class="btn-close">Đóng</button>
-        </div>
-        <div class="popup-loading-overlay" id="popupLoading">
-          <div class="popup-loading-spinner">
-            <i class="fa fa-spinner fa-spin"></i>
-            <span class="loading-text">Đang gửi mail vui lòng chờ...</span>
-          </div>
-        </div>
-      `;
-      popupBg.classList.add('open');
-      popupBg.style.display = 'flex';
-      document.body.style.overflow = 'hidden';
-      setTimeout(function() {
-        popup.scrollTop = 0;
-      }, 20);
+  function showPopup(product, lapDatArr, giaCongArr) {
+  const popupBg = document.getElementById('popup-bg');
+  const popup = document.getElementById('popup');
+  popup.innerHTML = `
+    <span class="close" id="close-popup">&times;</span>
+    <div style="font-weight:bold;color:#197b30;font-size:20px;text-align:center;margin-bottom:8px;">BẢNG BÁO GIÁ</div>
+    <div style="font-weight:bold;color:#197b30;margin-bottom:6px;">${product.tenDa}</div>
+    <table class="price-table" style="border:1.5px solid #168c3c;">
+      <tr style="background:#d0f5d8;color:#168c3c;">
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Stt</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Hạng mục</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đvt</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá cung cấp</th>
+        <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;">Đơn giá lắp đặt</th>
+      </tr>
+      ${renderHangMucTable(product, lapDatArr)}
+    </table>
+    <div style="font-weight:bold;color:#198b3a;margin:12px 0 6px 0;">Đơn giá gia công sản phẩm</div>
+    <table class="price-table" style="border:1.5px solid #168c3c;">
+      ${renderGiaCongTable(giaCongArr)}
+    </table>
+    <div class="popup-note" style="margin-bottom:5px;">
+      <b>Ghi chú:</b> <span>
+        1. Đơn giá trên là tạm tính, đơn giá chính xác phụ thuộc vào khối lượng, tính chất công trình/dự án.<br>
+        2. Đơn giá gốc (Đơn giá gồm cung cấp và thi công) cộng thêm 10% vào đơn giá cung cấp và thi công ở trên.
+      </span>
+    </div>
+    <div class="popup-actions">
+      <button class="btn-xanh">Nhận báo giá</button>
+      <button class="btn-do">Hotline: 0908 221 117</button>
+      <button class="btn-close">Đóng</button>
+    </div>
+    <div class="popup-loading-overlay" id="popupLoading">
+      <div class="popup-loading-spinner">
+        <i class="fa fa-spinner fa-spin"></i>
+        <span class="loading-text">Đang gửi mail vui lòng chờ...</span>
+      </div>
+    </div>
+  `;
+  popupBg.classList.add('open');
+  popupBg.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+  setTimeout(function() {
+    popup.scrollTop = 0;
+  }, 20);
 
-      popup.querySelector('#close-popup').onclick = hidePopup;
-      popup.querySelector('.btn-close').onclick = hidePopup;
-      popup.querySelector('.btn-do').onclick = () => window.open('tel:0908221117', '_self');
-      popup.querySelector('.btn-xanh').onclick = function() { /* gửi mail ... giữ nguyên code cũ của bạn */ };
+  popup.querySelector('#close-popup').onclick = hidePopup;
+  popup.querySelector('.btn-close').onclick = hidePopup;
+  popup.querySelector('.btn-do').onclick = () => window.open('tel:0908221117', '_self');
+
+  // Lấy các nút để disable/enable
+  const btnBaoGia = popup.querySelector('.btn-xanh');
+  const btnHotline = popup.querySelector('.btn-do');
+  const btnClose = popup.querySelector('.btn-close');
+
+  // SỰ KIỆN GỬI EMAIL CÓ OVERLAY LOADING
+  btnBaoGia.onclick = async function() {
+    // Hiển thị overlay loading phủ toàn vùng popup
+    const overlay = popup.querySelector('.popup-loading-overlay');
+    if (overlay) overlay.classList.add('show');
+
+    // Disable ba nút
+    btnBaoGia.disabled = true;
+    btnHotline.disabled = true;
+    btnClose.disabled = true;
+
+    // Dòng HTML các hàng của bảng hạng mục
+    const hangmucRows = renderHangMucTable(product, lapDatArr);
+    // Dòng HTML các hàng của bảng gia công
+    const giaCongRows = renderGiaCongTable(giaCongArr);
+    const tenDa = product.tenDa || "";
+
+    try {
+      const res = await fetch('/api/hangmuc', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tenDa, hangmucRows, giaCongRows })
+      });
+      const data = await res.json();
+      // Ẩn overlay loading và enable nút
+      if (overlay) overlay.classList.remove('show');
+      btnBaoGia.disabled = false;
+      btnHotline.disabled = false;
+      btnClose.disabled = false;
+      if (data.success) {
+        showSuccessPopup();
+      } else {
+        alert('Gửi báo giá thất bại: ' + (data.error || 'Unknown error'));
+      }
+    } catch (err) {
+      // Ẩn overlay loading khi lỗi và enable nút
+      if (overlay) overlay.classList.remove('show');
+      btnBaoGia.disabled = false;
+      btnHotline.disabled = false;
+      btnClose.disabled = false;
+      alert('Gửi báo giá thất bại: ' + err.message);
     }
+  };
+
+  function showSuccessPopup() {
+    popup.innerHTML = `
+      <div style="text-align:center;padding:18px 10px;">
+        <h2 style="font-size:20px;color:#1c8e3c;">Báo giá đã gửi về email của bạn thành công!</h2>
+        <div style="margin:18px 0 18px 0;font-size:15px;color:#222;">Cảm ơn quý khách đã sử dụng dịch vụ Stonecare Việt Nam.</div>
+        <button class="btn-xanh" style="margin-top:16px;font-size:16px">Đóng</button>
+      </div>
+    `;
+    popup.querySelector('.btn-xanh').onclick = hidePopup;
+  }
+}
     function hidePopup() {
       const popupBg = document.getElementById('popup-bg');
       popupBg.classList.remove('open');
       popupBg.style.display = 'none';
       document.body.style.overflow = '';
     }
+
     document.getElementById('popup-bg').onclick = function (e) {
       if (e.target === this) hidePopup();
     };
 
-    // ==== Fetch dữ liệu và khởi tạo ====
     async function fetchProductsAndInit() {
       const res = await fetch('/api/hangmuc');
       if (!res.ok) return;
@@ -1043,22 +1177,65 @@
       filterAndPaginateSections('');
     }
 
-    // ==== DOM Ready ====
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('searchInput').addEventListener('input', function() {
         var filter = this.value.trim().toLowerCase();
         filterAndPaginateSections(filter);
       });
+
+      let artificialFilterKey = "";
       document.querySelectorAll('.artificial-filter').forEach(btn => {
         btn.addEventListener('click', function() {
           document.querySelectorAll('.artificial-filter').forEach(b => b.classList.remove('active'));
           this.classList.add('active');
+          artificialFilterKey = this.getAttribute('data-key').toLowerCase();
           filterAndPaginateSections(document.getElementById('searchInput').value.trim().toLowerCase());
         });
       });
+
+      document.body.addEventListener('click', function (e) {
+        if (e.target.classList.contains('baogia-btn')) {
+          const idx = Number(e.target.getAttribute('data-idx'));
+          let sp;
+          if (e.target.closest('#marble-section')) sp = marbleProducts[idx];
+          else if (e.target.closest('#granite-section')) sp = graniteProducts[idx];
+          else if (e.target.closest('#artificial-section')) sp = artificialProducts[idx];
+          if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+        }
+      });
+
+      window.filterAndPaginateSections = function(searchTerm) {
+        let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+        renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
+
+        let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+        renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
+
+        let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
+        let filteredArtificial = artificialProducts.filter(product => {
+          let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
+          let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
+          return matchSearch && matchFilter;
+        });
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
+
+        [
+          {wrapper: 'marble-wrapper', products: filteredMarble},
+          {wrapper: 'granite-wrapper', products: filteredGranite},
+          {wrapper: 'artificial-wrapper', products: filteredArtificial}
+        ].forEach(({wrapper, products}) => {
+          var wrapperDiv = document.getElementById(wrapper);
+          if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
+        });
+
+        const artificialFilters = document.querySelector('.artificial-filters');
+        if (artificialFilters) {
+          artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
+        }
+      };
+
       fetchProductsAndInit();
     });
   </script>
 </body>
 </html>
-
