@@ -814,15 +814,16 @@
     </div>
   </div>
   <script>
-    // ====== BIẾN TOÀN CỤC ======
+    // ========= BIẾN TOÀN CỤC =========
     let marbleProducts = [];
     let graniteProducts = [];
     let artificialProducts = [];
-    window.currentMarble = [];
-    window.currentGranite = [];
-    window.currentArtificial = [];
+    // Biến lưu danh sách đang hiển thị mỗi section (sau phân trang, lọc, tìm kiếm)
+    let marbleDisplay = [];
+    let graniteDisplay = [];
+    let artificialDisplay = [];
 
-    // ======= MENU & FILTER =======
+    // ========= MENU & FILTER ==========
     const menuDrawer = document.getElementById('menuDrawer');
     const menuBackdrop = document.getElementById('menuBackdrop');
     const menuBtn = document.getElementById('openMenuMobile');
@@ -863,12 +864,9 @@
         graniteWrapper.style.display = '';
         artificialWrapper.style.display = '';
         artificialFilters.style.display = '';
-        window.currentMarble = marbleProducts;
-        window.currentGranite = graniteProducts;
-        window.currentArtificial = artificialProducts;
-        renderSectionWithPagination('marble-section', 'marble-pagination', window.currentMarble, 1, window.innerWidth < 650 ? 10 : 18);
-        renderSectionWithPagination('granite-section', 'granite-pagination', window.currentGranite, 1, window.innerWidth < 650 ? 10 : 18);
-        renderSectionWithPagination('artificial-section', 'artificial-pagination', window.currentArtificial, 1, window.innerWidth < 650 ? 10 : 18);
+        renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, window.innerWidth < 650 ? 10 : 18, false, 'marble');
+        renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, window.innerWidth < 650 ? 10 : 18, false, 'granite');
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, window.innerWidth < 650 ? 10 : 18, false, 'artificial');
       } else if (cat === "marble" || cat === "granite" || cat === "artificial") {
         mobileCategoryTitle.style.display = 'none';
         marbleWrapper.style.display = (cat === "marble") ? '' : 'none';
@@ -877,16 +875,13 @@
         artificialFilters.style.display = (cat === "artificial") ? '' : 'none';
 
         if (cat === "marble") {
-          window.currentMarble = marbleProducts;
-          renderSectionWithPagination('marble-section', 'marble-pagination', window.currentMarble, 1, 10);
+          renderSectionWithPagination('marble-section', 'marble-pagination', marbleProducts, 1, 10, false, 'marble');
         }
         if (cat === "granite") {
-          window.currentGranite = graniteProducts;
-          renderSectionWithPagination('granite-section', 'granite-pagination', window.currentGranite, 1, 10);
+          renderSectionWithPagination('granite-section', 'granite-pagination', graniteProducts, 1, 10, false, 'granite');
         }
         if (cat === "artificial") {
-          window.currentArtificial = artificialProducts;
-          renderSectionWithPagination('artificial-section', 'artificial-pagination', window.currentArtificial, 1, 10);
+          renderSectionWithPagination('artificial-section', 'artificial-pagination', artificialProducts, 1, 10, false, 'artificial');
         }
       } else if (cat.startsWith("artificial-")) {
         mobileCategoryTitle.style.display = 'none';
@@ -904,8 +899,7 @@
         graniteWrapper.style.display = 'none';
         artificialWrapper.style.display = '';
         artificialFilters.style.display = 'none';
-        window.currentArtificial = showList;
-        renderSectionWithPagination('artificial-section', 'artificial-pagination', window.currentArtificial, 1, 10);
+        renderSectionWithPagination('artificial-section', 'artificial-pagination', showList, 1, 10, false, 'artificial');
       }
     }
 
@@ -974,10 +968,16 @@
       return div;
     }
 
-    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
+    // Phải gán lại biến display[] mỗi lần renderSectionWithPagination!
+    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false, catType = '') {
       const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
       const end = isShowAll ? products.length : start + itemsPerPage;
       const pagedProducts = products.slice(start, end);
+
+      // Cập nhật biến global display:
+      if (catType === 'marble') marbleDisplay = pagedProducts;
+      else if (catType === 'granite') graniteDisplay = pagedProducts;
+      else if (catType === 'artificial') artificialDisplay = pagedProducts;
 
       const section = document.getElementById(sectionId);
       section.innerHTML = '';
@@ -997,9 +997,9 @@
       if (toggleBtn) {
         toggleBtn.onclick = () => {
           if (!isShowAll) {
-            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, true);
+            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, true, catType);
           } else {
-            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, false);
+            renderSectionWithPagination(sectionId, paginationId, products, 1, itemsPerPage, false, catType);
           }
         };
       }
@@ -1007,7 +1007,7 @@
         paginationEl.querySelectorAll('.pagination-page, .pagination-btn').forEach(btn => {
           btn.onclick = (e) => {
             const page = +btn.getAttribute('data-page');
-            renderSectionWithPagination(sectionId, paginationId, products, page, itemsPerPage, false);
+            renderSectionWithPagination(sectionId, paginationId, products, page, itemsPerPage, false, catType);
             window.scrollTo({top: section.offsetTop - 80, behavior:'smooth'});
           };
         });
@@ -1177,13 +1177,9 @@
         return matchSearch && matchFilter;
       });
 
-      window.currentMarble = filteredMarble;
-      window.currentGranite = filteredGranite;
-      window.currentArtificial = filteredArtificial;
-
-      renderSectionWithPagination('marble-section', 'marble-pagination', window.currentMarble, 1, 18);
-      renderSectionWithPagination('granite-section', 'granite-pagination', window.currentGranite, 1, 18);
-      renderSectionWithPagination('artificial-section', 'artificial-pagination', window.currentArtificial, 1, 18);
+      renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18, false, 'marble');
+      renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18, false, 'granite');
+      renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18, false, 'artificial');
 
       [
         {wrapper: 'marble-wrapper', products: filteredMarble},
@@ -1234,11 +1230,11 @@
           const idx = Number(e.target.getAttribute('data-idx'));
           let sp;
           if (e.target.closest('#marble-section')) {
-            sp = window.currentMarble[idx];
+            sp = marbleDisplay[idx];
           } else if (e.target.closest('#granite-section')) {
-            sp = window.currentGranite[idx];
+            sp = graniteDisplay[idx];
           } else if (e.target.closest('#artificial-section')) {
-            sp = window.currentArtificial[idx];
+            sp = artificialDisplay[idx];
           }
           if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
         }
@@ -1249,6 +1245,3 @@
   </script>
 </body>
 </html>
-
-
-
