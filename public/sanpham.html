@@ -973,7 +973,7 @@
       const section = document.getElementById(sectionId);
       section.innerHTML = '';
       pagedProducts.forEach((product, idx) => {
-        section.appendChild(createProductCard(product, start + idx));
+      section.appendChild(createProductCard(product, idx));
       });
 
       const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -1195,12 +1195,29 @@
 
       document.body.addEventListener('click', function (e) {
         if (e.target.classList.contains('baogia-btn')) {
-          const idx = Number(e.target.getAttribute('data-idx'));
-          let sp;
-          if (e.target.closest('#marble-section')) sp = marbleProducts[idx];
-          else if (e.target.closest('#granite-section')) sp = graniteProducts[idx];
-          else if (e.target.closest('#artificial-section')) sp = artificialProducts[idx];
-          if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+const idx = Number(e.target.getAttribute('data-idx'));
+let sp;
+if (e.target.closest('#marble-section')) {
+  // Lấy danh sách đang hiển thị
+  const section = document.getElementById('marble-section');
+  const cards = section.querySelectorAll('.product-card');
+  // Tìm tên đá từ DOM
+  const tenDa = cards[idx].querySelector('.name').textContent.trim().toLowerCase();
+  sp = marbleProducts.find(p => p.tenDa.toLowerCase() === tenDa);
+}
+else if (e.target.closest('#granite-section')) {
+  const section = document.getElementById('granite-section');
+  const cards = section.querySelectorAll('.product-card');
+  const tenDa = cards[idx].querySelector('.name').textContent.trim().toLowerCase();
+  sp = graniteProducts.find(p => p.tenDa.toLowerCase() === tenDa);
+}
+else if (e.target.closest('#artificial-section')) {
+  const section = document.getElementById('artificial-section');
+  const cards = section.querySelectorAll('.product-card');
+  const tenDa = cards[idx].querySelector('.name').textContent.trim().toLowerCase();
+  sp = artificialProducts.find(p => p.tenDa.toLowerCase() === tenDa);
+}
+if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
         }
       });
 
@@ -1240,4 +1257,5 @@
 </body>
 
 </html>
+
 
