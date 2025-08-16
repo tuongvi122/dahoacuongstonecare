@@ -90,28 +90,29 @@ module.exports = async (req, res) => {
     }
 
     // 3. Ghi vào Google Sheet
-    if (process.env.GOOGLE_SERVICE_ACCOUNT_JSON && process.env.GOOGLE_SHEET_ID) {
+    if (process.env.GOOGLE_SHEET_ID && process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL && process.env.GOOGLE_PRIVATE_KEY) {
       const sheets = google.sheets('v4');
-      const auth = new google.auth.GoogleAuth({
-        credentials: JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON),
-        scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+      const auth = new google.auth.JWT(
+        process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+        null,
+        process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+        ['https://www.googleapis.com/auth/spreadsheets']
+      );
+      await sheets.spreadsheets.values.append({
+        auth,
+        spreadsheetId: process.env.GOOGLE_SHEET_ID,
+        range: 'TTKH',
+        valueInputOption: 'RAW',
+        requestBody: {
+          values: [[
+            new Date().toLocaleString('vi-VN'),
+            name,
+            email,
+            phone,
+            note || ''
+          ]]
+        }
       });
-      const client = await auth.getClient();
-  await sheets.spreadsheets.values.append({
-  auth: client,
-  spreadsheetId: process.env.GOOGLE_SHEET_ID,
-  range: 'TTKH',
-  valueInputOption: 'RAW',
-  requestBody: {
-    values: [[
-      new Date().toLocaleString('vi-VN'),
-      name,
-      email,
-      phone,
-      note || ''
-    ]]
-  }
-});
     }
 
     res.status(200).send(`
