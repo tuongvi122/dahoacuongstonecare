@@ -1219,41 +1219,45 @@ document.body.addEventListener('click', function (e) {
   }
 });
 
-      window.filterAndPaginateSections = function(searchTerm) {
-        let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-        renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
+     window.filterAndPaginateSections = function(searchTerm) {
+  let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+  let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+  let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
+  let filteredArtificial = artificialProducts.filter(product => {
+    let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
+    let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
+    return matchSearch && matchFilter;
+  });
 
-        let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-        renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
+  // Gán lại biến current ngay tại đây!
+  currentMarbleProducts = filteredMarble;
+  currentGraniteProducts = filteredGranite;
+  currentArtificialProducts = filteredArtificial;
 
-        let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
-        let filteredArtificial = artificialProducts.filter(product => {
-          let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
-          let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
-          return matchSearch && matchFilter;
-        });
-        renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
+  renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
+  renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
+  renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
 
-        [
-          {wrapper: 'marble-wrapper', products: filteredMarble},
-          {wrapper: 'granite-wrapper', products: filteredGranite},
-          {wrapper: 'artificial-wrapper', products: filteredArtificial}
-        ].forEach(({wrapper, products}) => {
-          var wrapperDiv = document.getElementById(wrapper);
-          if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
-        });
+  [
+    {wrapper: 'marble-wrapper', products: filteredMarble},
+    {wrapper: 'granite-wrapper', products: filteredGranite},
+    {wrapper: 'artificial-wrapper', products: filteredArtificial}
+  ].forEach(({wrapper, products}) => {
+    var wrapperDiv = document.getElementById(wrapper);
+    if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
+  });
 
-        const artificialFilters = document.querySelector('.artificial-filters');
-        if (artificialFilters) {
-          artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
-        }
-      };
-
+  const artificialFilters = document.querySelector('.artificial-filters');
+  if (artificialFilters) {
+    artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
+  }
+};
       fetchProductsAndInit();
     });
   </script>
 </body>
 </html>
+
 
 
 
