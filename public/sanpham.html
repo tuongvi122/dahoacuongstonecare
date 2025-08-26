@@ -623,15 +623,19 @@
       .pagination-container {
         margin-top: 0;
       }
-      .popup-bg {
-        align-items: flex-start;
-        padding-top: 70px; /* Adjusted to account for mobile navbar height */
-      }
-      .popup {
-        margin: 0 !important;
-        max-height: calc(100vh - 95px); /* Adjusted to ensure full visibility below navbar */
-        overflow-y: auto;
-      }
+    .popup-bg {
+    align-items: flex-start;
+    padding-top: 70px;
+    padding-bottom: env(safe-area-inset-bottom, 16px); /* Thêm padding dưới nếu có notch */
+  }
+  .popup {
+    margin: 0 !important;
+    /* Sửa dòng dưới: */
+    max-height: calc(100dvh - 90px); /* d = dynamic, chính xác hơn cho mobile */
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding-bottom: 24px;  /* Đảm bảo luôn có khoảng trống dưới cho nút */
+  }
       .popup-note span {
       font-style: italic;
       }
@@ -1239,4 +1243,5 @@
   </script>
 </body>
 </html>
+
 
