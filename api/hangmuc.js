@@ -34,7 +34,7 @@ export default async function handler(req, res) {
           <h2 style="text-align:center;color:#168c3c;font-size:25px;font-weight:bold;letter-spacing:1px;margin-bottom:18px;">
             BẢNG BÁO GIÁ STONECARE
           </h2>
-          <div style="max-width:450px;margin:0 auto;background:#fff;border-radius:10px;padding:24px 18px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
+         <div style="width:max-content;max-width:100%;margin:0 auto;background:#fff;border-radius:10px;padding:24px 18px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;overflow-x:auto;display:inline-block;box-sizing:border-box;">
             <div style="font-size:20px;color:#197b30;font-weight:bold;text-align:center;margin-bottom:13px;">
               ${tenDa}
             </div>
@@ -165,4 +165,5 @@ export default async function handler(req, res) {
     console.error("Lỗi hangmuc.js:", err);
     res.status(500).json({ error: 'Không lấy được dữ liệu: ' + err.message });
   }
+
 }
