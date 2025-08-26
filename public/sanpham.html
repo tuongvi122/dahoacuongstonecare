@@ -958,28 +958,38 @@
       `;
     }
 
-    function createProductCard(product, idx) {
-      const div = document.createElement('div');
-      div.className = 'product-card';
-      div.innerHTML = `
-        <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
-        <div class="name">${product.tenDa}</div>
-        <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
-      `;
-      return div;
-    }
+function createProductCard(product, idx) {
+  const div = document.createElement('div');
+  div.className = 'product-card';
+  div.innerHTML = `
+    <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
+    <div class="name">${product.tenDa}</div>
+    <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
+  `;
+  return div;
+}
 
-    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
-      const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
-      const end = isShowAll ? products.length : start + itemsPerPage;
-      const pagedProducts = products.slice(start, end);
+// Khai báo ở ngoài
+let currentMarbleProducts = [];
+let currentGraniteProducts = [];
+let currentArtificialProducts = [];
 
-      const section = document.getElementById(sectionId);
-      section.innerHTML = '';
-      pagedProducts.forEach((product, idx) => {
-        section.appendChild(createProductCard(product, start + idx));
-      });
+function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
+  const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
+  const end = isShowAll ? products.length : start + itemsPerPage;
+  const pagedProducts = products.slice(start, end);
 
+  const section = document.getElementById(sectionId);
+  section.innerHTML = '';
+  pagedProducts.forEach((product, idx) => {
+    section.appendChild(createProductCard(product, idx)); // idx là của pagedProducts
+  });
+
+  // Cập nhật biến "current" cho từng section
+  if (sectionId === 'marble-section') currentMarbleProducts = pagedProducts;
+  if (sectionId === 'granite-section') currentGraniteProducts = pagedProducts;
+  if (sectionId === 'artificial-section') currentArtificialProducts = pagedProducts;
+  
       const totalPages = Math.ceil(products.length / itemsPerPage);
       const paginationEl = document.getElementById(paginationId);
       if (totalPages <= 1 && !isShowAll) {
@@ -1197,16 +1207,17 @@
         });
       });
 
-      document.body.addEventListener('click', function (e) {
-        if (e.target.classList.contains('baogia-btn')) {
-          const idx = Number(e.target.getAttribute('data-idx'));
-          let sp;
-          if (e.target.closest('#marble-section')) sp = marbleProducts[idx];
-          else if (e.target.closest('#granite-section')) sp = graniteProducts[idx];
-          else if (e.target.closest('#artificial-section')) sp = artificialProducts[idx];
-          if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
-        }
-      });
+// Event delegation
+document.body.addEventListener('click', function (e) {
+  if (e.target.classList.contains('baogia-btn')) {
+    const idx = Number(e.target.getAttribute('data-idx'));
+    let sp;
+    if (e.target.closest('#marble-section')) sp = currentMarbleProducts[idx];
+    else if (e.target.closest('#granite-section')) sp = currentGraniteProducts[idx];
+    else if (e.target.closest('#artificial-section')) sp = currentArtificialProducts[idx];
+    if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+  }
+});
 
       window.filterAndPaginateSections = function(searchTerm) {
         let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
@@ -1243,5 +1254,6 @@
   </script>
 </body>
 </html>
+
 
 
