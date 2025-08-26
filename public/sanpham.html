@@ -984,11 +984,6 @@ function renderSectionWithPagination(sectionId, paginationId, products, currentP
   pagedProducts.forEach((product, idx) => {
     section.appendChild(createProductCard(product, idx)); // idx là của pagedProducts
   });
-
-  // Cập nhật biến "current" cho từng section
-  if (sectionId === 'marble-section') currentMarbleProducts = pagedProducts;
-  if (sectionId === 'granite-section') currentGraniteProducts = pagedProducts;
-  if (sectionId === 'artificial-section') currentArtificialProducts = pagedProducts;
   
       const totalPages = Math.ceil(products.length / itemsPerPage);
       const paginationEl = document.getElementById(paginationId);
@@ -1257,6 +1252,7 @@ document.body.addEventListener('click', function (e) {
   </script>
 </body>
 </html>
+
 
 
 
