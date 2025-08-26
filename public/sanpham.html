@@ -941,21 +941,21 @@
       return div;
     }
 
-    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
-      const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
-      const end = isShowAll ? products.length : start + itemsPerPage;
-      const pagedProducts = products.slice(start, end);
+function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
+  const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
+  const end = isShowAll ? products.length : start + itemsPerPage;
+  const pagedProducts = products.slice(start, end);
 
-      // Lưu lại mảng sản phẩm đang hiển thị cho từng section
-      if (sectionId === 'marble-section') pagedMarble = pagedProducts;
-      if (sectionId === 'granite-section') pagedGranite = pagedProducts;
-      if (sectionId === 'artificial-section') pagedArtificial = pagedProducts;
+  // Lưu lại pagedProducts cho từng loại
+  if (sectionId === 'marble-section') window.pagedMarble = pagedProducts;
+  if (sectionId === 'granite-section') window.pagedGranite = pagedProducts;
+  if (sectionId === 'artificial-section') window.pagedArtificial = pagedProducts;
 
-      const section = document.getElementById(sectionId);
-      section.innerHTML = '';
-      pagedProducts.forEach((product, idx) => {
-        section.appendChild(createProductCard(product, idx)); // idx là index trên trang hiện tại
-      });
+  const section = document.getElementById(sectionId);
+  section.innerHTML = '';
+  pagedProducts.forEach((product, idx) => {
+    section.appendChild(createProductCard(product, idx));
+  });
 
       const totalPages = Math.ceil(products.length / itemsPerPage);
       const paginationEl = document.getElementById(paginationId);
@@ -1234,22 +1234,31 @@
         });
       });
 
-    // Event delegation: Bấm nút "Báo giá hạng mục" lấy đúng sản phẩm đang hiển thị
-    document.body.addEventListener('click', function (e) {
-      if (e.target.classList.contains('baogia-btn')) {
-        const idx = Number(e.target.getAttribute('data-idx'));
-        let sp;
-        if (e.target.closest('#marble-section')) sp = pagedMarble[idx];
-        else if (e.target.closest('#granite-section')) sp = pagedGranite[idx];
-        else if (e.target.closest('#artificial-section')) sp = pagedArtificial[idx];
-        if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
-      }
-    });
+document.body.addEventListener('click', function (e) {
+  if (e.target.classList.contains('baogia-btn')) {
+    const idx = Number(e.target.getAttribute('data-idx'));
+    let sp;
+    if (e.target.closest('#marble-section')) {
+      sp = window.pagedMarble[idx];
+      console.log('Marble click idx', idx, window.pagedMarble, sp);
+    }
+    else if (e.target.closest('#granite-section')) {
+      sp = window.pagedGranite[idx];
+      console.log('Granite click idx', idx, window.pagedGranite, sp);
+    }
+    else if (e.target.closest('#artificial-section')) {
+      sp = window.pagedArtificial[idx];
+      console.log('Artificial click idx', idx, window.pagedArtificial, sp);
+    }
+    if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+  }
+});
       fetchProductsAndInit();
     });
   </script>
 </body>
 </html>
+
 
 
 
