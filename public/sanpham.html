@@ -927,64 +927,36 @@
     let graniteProducts = [];
     let artificialProducts = [];
 
-    function createPagination(currentPage, totalPages, isShowAll = false) {
-      let pages = [];
-      if (totalPages <= 7) {
-        for (let i = 1; i <= totalPages; i++) pages.push(i);
-      } else {
-        pages = [1];
-        if (currentPage > 4) pages.push('...');
-        for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) pages.push(i);
-        if (currentPage < totalPages - 3) pages.push('...');
-        pages.push(totalPages);
-      }
-      return `
-        <span class="pagination-toggle">${isShowAll ? 'Quay lại' : 'xem tất cả'}</span>
-        ${!isShowAll ? `
-          <div class="pagination">
-            <button class="pagination-btn" data-page="1" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>
-            <button class="pagination-btn" data-page="${currentPage-1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>
-            ${
-              pages.map(p => 
-                p === '...' 
-                  ? `<span class="pagination-ellipsis">...</span>`
-                  : `<button class="pagination-page${currentPage === p ? ' active' : ''}" data-page="${p}">${p}</button>`
-              ).join('')
-            }
-            <button class="pagination-btn" data-page="${currentPage+1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>
-            <button class="pagination-btn" data-page="${totalPages}" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>
-          </div>
-        ` : ''}
+    // Các biến này sẽ chứa mảng sản phẩm ĐANG HIỂN THỊ trên trang (pagination)
+    let pagedMarble = [], pagedGranite = [], pagedArtificial = [];
+
+    function createProductCard(product, idx) {
+      const div = document.createElement('div');
+      div.className = 'product-card';
+      div.innerHTML = `
+        <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
+        <div class="name">${product.tenDa}</div>
+        <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
       `;
+      return div;
     }
 
-function createProductCard(product, idx) {
-  const div = document.createElement('div');
-  div.className = 'product-card';
-  div.innerHTML = `
-    <img src="${product.hinhAnh}" alt="${product.tenDa}" loading="lazy" />
-    <div class="name">${product.tenDa}</div>
-    <button class="baogia-btn" data-idx="${idx}">Báo giá hạng mục</button>
-  `;
-  return div;
-}
+    function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
+      const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
+      const end = isShowAll ? products.length : start + itemsPerPage;
+      const pagedProducts = products.slice(start, end);
 
-// Khai báo ở ngoài
-let currentMarbleProducts = [];
-let currentGraniteProducts = [];
-let currentArtificialProducts = [];
+      // Lưu lại mảng sản phẩm đang hiển thị cho từng section
+      if (sectionId === 'marble-section') pagedMarble = pagedProducts;
+      if (sectionId === 'granite-section') pagedGranite = pagedProducts;
+      if (sectionId === 'artificial-section') pagedArtificial = pagedProducts;
 
-function renderSectionWithPagination(sectionId, paginationId, products, currentPage = 1, itemsPerPage = 18, isShowAll = false) {
-  const start = isShowAll ? 0 : (currentPage - 1) * itemsPerPage;
-  const end = isShowAll ? products.length : start + itemsPerPage;
-  const pagedProducts = products.slice(start, end);
+      const section = document.getElementById(sectionId);
+      section.innerHTML = '';
+      pagedProducts.forEach((product, idx) => {
+        section.appendChild(createProductCard(product, idx)); // idx là index trên trang hiện tại
+      });
 
-  const section = document.getElementById(sectionId);
-  section.innerHTML = '';
-  pagedProducts.forEach((product, idx) => {
-    section.appendChild(createProductCard(product, idx)); // idx là của pagedProducts
-  });
-  
       const totalPages = Math.ceil(products.length / itemsPerPage);
       const paginationEl = document.getElementById(paginationId);
       if (totalPages <= 1 && !isShowAll) {
@@ -1185,7 +1157,67 @@ function renderSectionWithPagination(sectionId, paginationId, products, currentP
       window.lapDatArr = data.lapDatArr;
       filterAndPaginateSections('');
     }
+    
+    function createPagination(currentPage, totalPages, isShowAll = false) {
+      let pages = [];
+      if (totalPages <= 7) {
+        for (let i = 1; i <= totalPages; i++) pages.push(i);
+      } else {
+        pages = [1];
+        if (currentPage > 4) pages.push('...');
+        for (let i = Math.max(2, currentPage - 2); i <= Math.min(totalPages - 1, currentPage + 2); i++) pages.push(i);
+        if (currentPage < totalPages - 3) pages.push('...');
+        pages.push(totalPages);
+      }
+      return `
+        <span class="pagination-toggle">${isShowAll ? 'Quay lại' : 'xem tất cả'}</span>
+        ${!isShowAll ? `
+          <div class="pagination">
+            <button class="pagination-btn" data-page="1" ${currentPage === 1 ? 'disabled' : ''}>&laquo;</button>
+            <button class="pagination-btn" data-page="${currentPage-1}" ${currentPage === 1 ? 'disabled' : ''}>&lsaquo;</button>
+            ${
+              pages.map(p => 
+                p === '...' 
+                  ? `<span class="pagination-ellipsis">...</span>`
+                  : `<button class="pagination-page${currentPage === p ? ' active' : ''}" data-page="${p}">${p}</button>`
+              ).join('')
+            }
+            <button class="pagination-btn" data-page="${currentPage+1}" ${currentPage === totalPages ? 'disabled' : ''}>&rsaquo;</button>
+            <button class="pagination-btn" data-page="${totalPages}" ${currentPage === totalPages ? 'disabled' : ''}>&raquo;</button>
+          </div>
+        ` : ''}
+      `;
+    }
+      // Hàm filter và render lại các section
+    window.filterAndPaginateSections = function(searchTerm) {
+      let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+      let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
+      let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
+      let filteredArtificial = artificialProducts.filter(product => {
+        let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
+        let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
+        return matchSearch && matchFilter;
+      });
 
+      renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
+      renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
+      renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
+
+      [
+        {wrapper: 'marble-wrapper', products: filteredMarble},
+        {wrapper: 'granite-wrapper', products: filteredGranite},
+        {wrapper: 'artificial-wrapper', products: filteredArtificial}
+      ].forEach(({wrapper, products}) => {
+        var wrapperDiv = document.getElementById(wrapper);
+        if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
+      });
+
+      const artificialFilters = document.querySelector('.artificial-filters');
+      if (artificialFilters) {
+        artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
+      }
+    };
+      // Khởi động
     document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('searchInput').addEventListener('input', function() {
         var filter = this.value.trim().toLowerCase();
@@ -1202,56 +1234,23 @@ function renderSectionWithPagination(sectionId, paginationId, products, currentP
         });
       });
 
-// Event delegation
-document.body.addEventListener('click', function (e) {
-  if (e.target.classList.contains('baogia-btn')) {
-    const idx = Number(e.target.getAttribute('data-idx'));
-    let sp;
-    if (e.target.closest('#marble-section')) sp = currentMarbleProducts[idx];
-    else if (e.target.closest('#granite-section')) sp = currentGraniteProducts[idx];
-    else if (e.target.closest('#artificial-section')) sp = currentArtificialProducts[idx];
-    if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
-  }
-});
-
-     window.filterAndPaginateSections = function(searchTerm) {
-  let filteredMarble = marbleProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-  let filteredGranite = graniteProducts.filter(product => product.tenDa.toLowerCase().includes(searchTerm));
-  let artificialFilterKey = document.querySelector('.artificial-filter.active')?.getAttribute('data-key').toLowerCase() || '';
-  let filteredArtificial = artificialProducts.filter(product => {
-    let matchSearch = product.tenDa.toLowerCase().includes(searchTerm);
-    let matchFilter = !artificialFilterKey || product.tenDa.toLowerCase().includes(artificialFilterKey);
-    return matchSearch && matchFilter;
-  });
-
-  // Gán lại biến current ngay tại đây!
-  currentMarbleProducts = filteredMarble;
-  currentGraniteProducts = filteredGranite;
-  currentArtificialProducts = filteredArtificial;
-
-  renderSectionWithPagination('marble-section', 'marble-pagination', filteredMarble, 1, 18);
-  renderSectionWithPagination('granite-section', 'granite-pagination', filteredGranite, 1, 18);
-  renderSectionWithPagination('artificial-section', 'artificial-pagination', filteredArtificial, 1, 18);
-
-  [
-    {wrapper: 'marble-wrapper', products: filteredMarble},
-    {wrapper: 'granite-wrapper', products: filteredGranite},
-    {wrapper: 'artificial-wrapper', products: filteredArtificial}
-  ].forEach(({wrapper, products}) => {
-    var wrapperDiv = document.getElementById(wrapper);
-    if (wrapperDiv) wrapperDiv.style.display = products.length ? '' : 'none';
-  });
-
-  const artificialFilters = document.querySelector('.artificial-filters');
-  if (artificialFilters) {
-    artificialFilters.style.display = filteredArtificial.length ? '' : 'none';
-  }
-};
+    // Event delegation: Bấm nút "Báo giá hạng mục" lấy đúng sản phẩm đang hiển thị
+    document.body.addEventListener('click', function (e) {
+      if (e.target.classList.contains('baogia-btn')) {
+        const idx = Number(e.target.getAttribute('data-idx'));
+        let sp;
+        if (e.target.closest('#marble-section')) sp = pagedMarble[idx];
+        else if (e.target.closest('#granite-section')) sp = pagedGranite[idx];
+        else if (e.target.closest('#artificial-section')) sp = pagedArtificial[idx];
+        if (sp) showPopup(sp, window.lapDatArr, window.giaCongArr);
+      }
+    });
       fetchProductsAndInit();
     });
   </script>
 </body>
 </html>
+
 
 
 
