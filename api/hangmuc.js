@@ -30,8 +30,8 @@ export default async function handler(req, res) {
 
       // Thiết kế HTML email báo giá: kẻ khung rõ ràng cho cả tiêu đề & nội dung bảng
       const emailContent = `
-        <div style="background:#f7fafc;padding:32px 12px;border-radius:12px;">
-          <h2 style="text-align:center;color:#168c3c;font-size:25px;font-weight:bold;letter-spacing:1px;margin-bottom:10px;">
+        <div style="background:#f7fafc;padding:20px 12px;border-radius:12px;">
+          <h2 style="text-align:center;color:#168c3c;font-size:23px;font-weight:bold;letter-spacing:1px;margin-bottom:10px;">
             BẢNG BÁO GIÁ STONECARE
           </h2>
          <div style="max-width:650px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 9px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
@@ -166,6 +166,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Không lấy được dữ liệu: ' + err.message });
   }
 }
+
 
 
 
