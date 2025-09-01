@@ -68,7 +68,7 @@ export default async function handler(req, res) {
               Mọi thắc mắc xin liên hệ: <b style="color:#ed1c24;font-size:20px;">Hotline 0908 221 117</b>
             </div>
           </div>
-          <div style="margin-top:22px;text-align:center;color:#888;font-size:14px;">Công ty Stonecare Việt Nam xin cảm ơn quý khách!</div>
+          <div style="margin-top:15px;text-align:center;color:#888;font-size:14px;">Công ty Stonecare Việt Nam xin cảm ơn quý khách!</div>
         </div>
       `;
 
@@ -166,6 +166,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Không lấy được dữ liệu: ' + err.message });
   }
 }
+
 
 
 
