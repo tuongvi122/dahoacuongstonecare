@@ -31,10 +31,10 @@ export default async function handler(req, res) {
       // Thiết kế HTML email báo giá: kẻ khung rõ ràng cho cả tiêu đề & nội dung bảng
       const emailContent = `
         <div style="background:#f7fafc;padding:32px 12px;border-radius:12px;">
-          <h2 style="text-align:center;color:#168c3c;font-size:20px;font-weight:bold;letter-spacing:1px;margin-bottom:5px;">
+          <h2 style="text-align:center;color:#168c3c;font-size:25px;font-weight:bold;letter-spacing:1px;margin-bottom:10px;">
             BẢNG BÁO GIÁ STONECARE
           </h2>
-         <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 9px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
+         <div style="max-width:650px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 9px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
             <div style="font-size:20px;color:#197b30;font-weight:bold;text-align:center;margin-bottom:13px;">
               ${tenDa}
             </div>
@@ -43,7 +43,7 @@ export default async function handler(req, res) {
               <tr style="background:#d0f5d8;color:#168c3c;">
               <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;font-size:15px;width:10%;">Stt</th>
               <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;font-size:15px;width:20%;">Hạng mục</th>
-              <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;font-size:15px;width:15%;">Dvt</th>
+              <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;font-size:15px;width:15%;">Đvt</th>
               <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;width:30%;min-width:120px;font-size:15px;">Đơn giá cung cấp</th>
               <th style="border:1.5px solid #168c3c;padding:8px;text-align:center;width:25%;min-width:100px;font-size:15px;">Đơn giá lắp đặt</th>
               </tr> 
@@ -165,8 +165,8 @@ export default async function handler(req, res) {
     console.error("Lỗi hangmuc.js:", err);
     res.status(500).json({ error: 'Không lấy được dữ liệu: ' + err.message });
   }
-
 }
+
 
 
 
