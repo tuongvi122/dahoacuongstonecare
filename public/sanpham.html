@@ -935,29 +935,37 @@ function filterMobileByCategory(cat) {
     }
 
     // Hiển thị sản phẩm
-    function renderProducts(productsToRender) {
-      const sections = {
-        'Đá marble': document.querySelector('#Đá\\ marble .product-grid'),
-        'Đá granite': document.querySelector('#Đá\\ granite .product-grid'),
-        'Đá nhân tạo': document.querySelector('#Đá\\ nhân\\ tạo .product-grid')
-      };
+function renderProducts(productsToRender) {
+  const sections = {
+    'Đá marble': document.querySelector('#Đá\\ marble'),
+    'Đá granite': document.querySelector('#Đá\\ granite'),
+    'Đá nhân tạo': document.querySelector('#Đá\\ nhân\\ tạo')
+  };
 
-      Object.values(sections).forEach(section => section.innerHTML = '');
+  // Xóa sản phẩm cũ và mặc định ẩn tất cả section
+  Object.values(sections).forEach(section => {
+    section.querySelector('.product-grid').innerHTML = '';
+    section.style.display = 'none';
+  });
 
-      productsToRender.forEach(product => {
-        const section = sections[product.loaiDa];
-        if (section) {
-          const card = document.createElement('div');
-          card.className = 'product-card';
-          card.innerHTML = `
-            <img src="${product.hinhAnh}" alt="${product.tenDa}">
-            <h3>${product.tenDa}</h3>
-            <button onclick="showPricePopup('${product.tenDa}')">Báo giá hạng mục</button>
-          `;
-          section.appendChild(card);
-        }
-      });
+  // Thêm sản phẩm mới vào đúng section
+  productsToRender.forEach(product => {
+    const section = sections[product.loaiDa];
+    if (section) {
+      const grid = section.querySelector('.product-grid');
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${product.hinhAnh}" alt="${product.tenDa}">
+        <h3>${product.tenDa}</h3>
+        <button onclick="showPricePopup('${product.tenDa}')">Báo giá hạng mục</button>
+      `;
+      grid.appendChild(card);
+      section.style.display = ''; // Chỉ hiển thị section nếu có sản phẩm
     }
+  });
+}
+
 // Lọc sản phẩm theo danh mục
 document.querySelectorAll('.category').forEach(button => {
   button.addEventListener('click', () => {
@@ -1092,4 +1100,5 @@ document.querySelectorAll('.category').forEach(button => {
   </script>
 </body>
 </html>
+
 
