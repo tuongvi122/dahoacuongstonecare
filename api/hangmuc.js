@@ -34,7 +34,7 @@ export default async function handler(req, res) {
           <h2 style="text-align:center;color:#168c3c;font-size:18px;font-weight:bold;letter-spacing:1px;margin-bottom:2px;">
             BẢNG BÁO GIÁ STONECARE
           </h2>
-         <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:10px;padding:15px 10px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
+         <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 10px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
             <div style="font-size:20px;color:#197b30;font-weight:bold;text-align:center;margin-bottom:13px;">
               ${tenDa}
             </div>
@@ -167,5 +167,6 @@ export default async function handler(req, res) {
   }
 
 }
+
 
 
