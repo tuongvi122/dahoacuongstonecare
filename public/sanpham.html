@@ -746,6 +746,10 @@
       <h2>ĐÁ NHÂN TẠO</h2>
       <div class="product-grid"></div>
     </div>
+    <!-- KẾT QUẢ LỌC (mới thêm) -->
+  <div class="product-section" id="searchResultSection" style="display:none;">
+    <div class="product-grid"></div>
+  </div>
   </div>
 
   <div class="popup" id="pricePopup">
@@ -827,28 +831,73 @@
       filterMobileByCategory(cat);
     });
 
-    function filterMobileByCategory(cat) {
-      currentMobileCat = cat;
-      const mobileCategoryTitle = document.querySelector('.mobile-category-title');
-      const marbleSection = document.querySelector('#Đá\\ marble');
-      const graniteSection = document.querySelector('#Đá\\ granite');
-      const artificialSection = document.querySelector('#Đá\\ nhân\\ tạo');
+function filterMobileByCategory(cat) {
+  currentMobileCat = cat;
+  const mobileCategoryTitle = document.querySelector('.mobile-category-title');
+  const marbleSection = document.querySelector('#Đá\\ marble');
+  const graniteSection = document.querySelector('#Đá\\ granite');
+  const artificialSection = document.querySelector('#Đá\\ nhân\\ tạo');
+  const searchResultSection = document.querySelector('#searchResultSection');
 
-      if (cat === "all") {
-        mobileCategoryTitle.textContent = "Xem giá ngay không cần hỏi!";
-        marbleSection.style.display = '';
-        graniteSection.style.display = '';
-        artificialSection.style.display = '';
-        renderProducts(products);
-      } else {
-        mobileCategoryTitle.textContent = cat;
-        marbleSection.style.display = cat === "Đá marble" ? '' : 'none';
-        graniteSection.style.display = cat === "Đá granite" ? '' : 'none';
-        artificialSection.style.display = cat === "Đá nhân tạo" ? '' : 'none';
-        const filtered = products.filter(p => p.loaiDa === cat || (cat.includes("Đá nhân tạo") && p.loaiDa === "Đá nhân tạo"));
-        renderProducts(filtered);
-      }
-    }
+  if (cat === "all") {
+    mobileCategoryTitle.textContent = "Xem giá ngay không cần hỏi!";
+    marbleSection.style.display = '';
+    graniteSection.style.display = '';
+    artificialSection.style.display = '';
+    searchResultSection.style.display = 'none';
+    renderProducts(products);
+  } else if (cat === "Đá marble" || cat === "Đá granite" || cat === "Đá nhân tạo") {
+ // Nhóm lớn
+  mobileCategoryTitle.textContent = cat;
+
+  const sections = {
+    "Đá marble": marbleSection,
+    "Đá granite": graniteSection,
+    "Đá nhân tạo": artificialSection
+  };
+
+  // Ẩn tất cả
+  marbleSection.style.display = 'none';
+  graniteSection.style.display = 'none';
+  artificialSection.style.display = 'none';
+
+  // Hiện section đúng hạng mục nhưng ẩn luôn <h2>
+  const activeSection = sections[cat];
+  activeSection.style.display = '';
+  const title = activeSection.querySelector('h2');
+  if (title) title.style.display = 'none';
+
+  searchResultSection.style.display = 'none';
+
+  const filtered = products.filter(p => p.loaiDa === cat);
+  renderProducts(filtered);
+  } else {
+    // Nhóm con => lọc theo tên
+    mobileCategoryTitle.textContent = cat;
+    marbleSection.style.display = 'none';
+    graniteSection.style.display = 'none';
+    artificialSection.style.display = 'none';
+    searchResultSection.style.display = '';
+
+    const filtered = products.filter(p =>
+      p.tenDa.toLowerCase().includes(cat.toLowerCase())
+    );
+
+    // renderProducts sẽ vẽ vào searchResultSection
+    const section = searchResultSection.querySelector('.product-grid');
+    section.innerHTML = '';
+    filtered.forEach(product => {
+      const card = document.createElement('div');
+      card.className = 'product-card';
+      card.innerHTML = `
+        <img src="${product.hinhAnh}" alt="${product.tenDa}">
+        <h3>${product.tenDa}</h3>
+        <button onclick="showPricePopup('${product.tenDa}')">Báo giá hạng mục</button>
+      `;
+      section.appendChild(card);
+    });
+  }
+}
 
     // Mobile Search
     const mobileSearchModal = document.getElementById('mobileSearchModal');
@@ -915,10 +964,31 @@ document.querySelectorAll('.category').forEach(button => {
     document.querySelectorAll('.category').forEach(btn => btn.classList.remove('active'));
     button.classList.add('active');
     const category = button.dataset.category;
+
+    const marbleSection = document.querySelector('#Đá\\ marble');
+    const graniteSection = document.querySelector('#Đá\\ granite');
+    const artificialSection = document.querySelector('#Đá\\ nhân\\ tạo');
+
     if (category === 'all') {
+      marbleSection.style.display = '';
+      graniteSection.style.display = '';
+      artificialSection.style.display = '';
       renderProducts(products);
+    } else if (category === 'Đá marble' || category === 'Đá granite' || category === 'Đá nhân tạo') {
+      marbleSection.style.display = (category === 'Đá marble') ? '' : 'none';
+      graniteSection.style.display = (category === 'Đá granite') ? '' : 'none';
+      artificialSection.style.display = (category === 'Đá nhân tạo') ? '' : 'none';
+      const filtered = products.filter(p => p.loaiDa === category);
+      renderProducts(filtered);
     } else {
-      const filtered = products.filter(p => p.loaiDa === category || category.includes(p.loaiDa));
+      // các nhóm con (đá nung kết, đá vi co...)
+      marbleSection.style.display = 'none';
+      graniteSection.style.display = 'none';
+
+      const filtered = products.filter(p => 
+        p.loaiDa === category || 
+        p.tenDa.toLowerCase().includes(category.toLowerCase())
+      );
       renderProducts(filtered);
     }
   });
@@ -1022,3 +1092,4 @@ document.querySelectorAll('.category').forEach(button => {
   </script>
 </body>
 </html>
+
