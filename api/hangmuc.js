@@ -31,10 +31,10 @@ export default async function handler(req, res) {
       // Thiết kế HTML email báo giá: kẻ khung rõ ràng cho cả tiêu đề & nội dung bảng
       const emailContent = `
         <div style="background:#f7fafc;padding:32px 12px;border-radius:12px;">
-          <h2 style="text-align:center;color:#168c3c;font-size:18px;font-weight:bold;letter-spacing:1px;margin-bottom:2px;">
+          <h2 style="text-align:center;color:#168c3c;font-size:20px;font-weight:bold;letter-spacing:1px;margin-bottom:5px;">
             BẢNG BÁO GIÁ STONECARE
           </h2>
-         <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 10px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
+         <div style="max-width:600px;margin:0 auto;background:#fff;border-radius:10px;padding:20px 9px;box-shadow:0 2px 12px #e0e0e0;border:1.5px solid #168c3c;">
             <div style="font-size:20px;color:#197b30;font-weight:bold;text-align:center;margin-bottom:13px;">
               ${tenDa}
             </div>
@@ -64,8 +64,8 @@ export default async function handler(req, res) {
                 2. Đơn giá gốc (Đơn giá gồm cung cấp và thi công) cộng thêm 10% vào đơn giá cung cấp và thi công ở trên.
               </span>
             </div>
-            <div style="margin-top:18px;font-size:15px;color:#444;text-align:center;">
-              Mọi thắc mắc xin liên hệ: <b style="color:#ed1c24;font-size:15px;">Hotline 0908 221 117</b>
+            <div style="margin-top:18px;font-size:18px;color:#444;text-align:center;">
+              Mọi thắc mắc xin liên hệ: <b style="color:#ed1c24;font-size:20px;">Hotline 0908 221 117</b>
             </div>
           </div>
           <div style="margin-top:22px;text-align:center;color:#888;font-size:14px;">Công ty Stonecare Việt Nam xin cảm ơn quý khách!</div>
@@ -167,6 +167,7 @@ export default async function handler(req, res) {
   }
 
 }
+
 
 
 
