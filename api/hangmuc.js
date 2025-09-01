@@ -52,7 +52,7 @@ export default async function handler(req, res) {
                 ${addTableBorderToRows(hangmucRows)}
               </tbody>
             </table>
-            <div style="font-weight:bold;color:#198b3a;margin:5px 0 6px 0;font-size:15px;">Đơn giá gia công sản phẩm</div>
+            <div style="font-weight:bold;color:#198b3a;margin:6px 0 6px 0;font-size:17px;">Đơn giá gia công sản phẩm</div>
             <table style="width:100%;border-collapse:collapse;margin-bottom:8px;">
             <tbody style="font-size:15px;">
             ${addTableBorderToGiaCongRows(giaCongRows)}
@@ -166,6 +166,7 @@ export default async function handler(req, res) {
     res.status(500).json({ error: 'Không lấy được dữ liệu: ' + err.message });
   }
 }
+
 
 
 
