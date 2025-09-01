@@ -715,7 +715,12 @@
 
   <!-- Desktop Navbar -->
   <div class="navbar">
-    <img src="https://res.cloudinary.com/drhovvwlo/image/upload/v1755313890/Logostonecare_tacgbd.jpg" alt="Stonecare Logo">
+    <img id="logo-desktop" src="https://res.cloudinary.com/drhovvwlo/image/upload/v1755313890/Logostonecare_tacgbd.jpg" alt="Stonecare Logo">
+  <script>
+  document.getElementById('logo-desktop').onclick = function() {
+    window.location.href = 'sanpham.html';
+  };
+</script>
     <div class="header-text">XEM GIÁ NGAY KHÔNG CẦN HỎI!</div>
     <div class="hotline">Hotline: 0908 221 117 Mr.Duy</div>
     <div class="search-bar">
@@ -1100,5 +1105,6 @@ document.querySelectorAll('.category').forEach(button => {
   </script>
 </body>
 </html>
+
 
 
