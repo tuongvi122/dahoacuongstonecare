@@ -657,6 +657,27 @@
   background: #e1e1e1;
   border-radius: 4px;
 }
+  /* Scroll to Top Button Styling */
+  .scroll-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #105cce;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    cursor: pointer;
+    display: none;
+    z-index: 1000;
+    text-align: center;
+    line-height: 40px;
+  }
+  .scroll-to-top:hover {
+    background-color: #08a00b;
+  }
   </style>
 </head>
 <body>
@@ -803,6 +824,24 @@
       <button id="closeMailSuccessBtn">Đóng</button>
     </div>
   </div>
+      <!-- Scroll to Top Button -->
+  <button class="scroll-to-top" onclick="scrollToTop()">⬆</button>
+
+  <script>
+    // Scroll to Top Functionality
+    window.onscroll = function() {
+      const scrollButton = document.querySelector('.scroll-to-top');
+      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+        scrollButton.style.display = 'block';
+      } else {
+        scrollButton.style.display = 'none';
+      }
+    };
+
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
   <script>
     let products = [];
     let giaCongArr = [];
@@ -1105,6 +1144,7 @@ document.querySelectorAll('.category').forEach(button => {
   </script>
 </body>
 </html>
+
 
 
 
