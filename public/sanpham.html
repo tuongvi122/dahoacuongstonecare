@@ -826,22 +826,41 @@
   </div>
       <!-- Scroll to Top Button -->
   <button class="scroll-to-top" onclick="scrollToTop()">⬆</button>
-
   <script>
-    // Scroll to Top Functionality
-    window.onscroll = function() {
-      const scrollButton = document.querySelector('.scroll-to-top');
-      if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-        scrollButton.style.display = 'block';
-      } else {
-        scrollButton.style.display = 'none';
-      }
-    };
+  // Scroll to Top Functionality
+  window.onscroll = function() {
+    const scrollButton = document.querySelector('.scroll-to-top');
+    const popup = document.querySelector('#pricePopup'); // Sửa thành '#pricePopup'
+    const isMobile = window.innerWidth < 768; // Kiểm tra giao diện mobile
+    const isPopupVisible = popup && getComputedStyle(popup).display !== 'none'; // Kiểm tra popup có hiển thị không
 
-    function scrollToTop() {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (isMobile && isPopupVisible) {
+      scrollButton.style.display = 'none'; // Ẩn nút Scroll to Top khi popup hiển thị trên mobile
+    } else if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      scrollButton.style.display = 'block'; // Hiển thị nút khi cuộn xuống
+    } else {
+      scrollButton.style.display = 'none'; // Ẩn nút khi ở đầu trang
     }
-  </script>
+  };
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Cập nhật trạng thái nút khi popup đóng/mở (nếu popup dùng sự kiện click để mở/đóng)
+  document.addEventListener('click', function() {
+    const scrollButton = document.querySelector('.scroll-to-top');
+    const popup = document.querySelector('#pricePopup'); // Sửa thành '#pricePopup'
+    const isMobile = window.innerWidth < 768;
+    const isPopupVisible = popup && getComputedStyle(popup).display !== 'none';
+
+    if (isMobile && isPopupVisible) {
+      scrollButton.style.display = 'none';
+    } else if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+      scrollButton.style.display = 'block';
+    }
+  });
+</script>
   <script>
     let products = [];
     let giaCongArr = [];
@@ -1144,6 +1163,7 @@ document.querySelectorAll('.category').forEach(button => {
   </script>
 </body>
 </html>
+
 
 
 
